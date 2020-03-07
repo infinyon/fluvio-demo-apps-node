@@ -1,0 +1,11 @@
+{
+  "name": "no-api",
+  "version": "1.0.0",
+  "description": "Node API examples Fluvio Data Streaming Platform",
+  "keywords": [],
+  "author": "fluvio <admin@fluvio.io> (fluvio.io)",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "@fluvio/client": "^0.1.2"
+  }
+}
