@@ -1,7 +1,7 @@
 var flvClient = require('@fluvio/client');
 const EventEmitter = require('events').EventEmitter;
 const emitter = new EventEmitter();
-const ConsumeCLI = require('./cli/consumeProduce').Cli;
+const ConsumeCLI = require('./utils/cli').Cli;
 
 function consumeMessages() {
     let cli = new ConsumeCLI();

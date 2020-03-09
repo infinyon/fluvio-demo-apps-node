@@ -1,6 +1,6 @@
 var flvClient = require('@fluvio/client');
 var stdin = process.openStdin();
-const ProduceCLI = require('./cli/consumeProduce').Cli;
+const ProduceCLI = require('./utils/cli').Cli;
 
 function produceMessages() {
     let cli = new ProduceCLI();
