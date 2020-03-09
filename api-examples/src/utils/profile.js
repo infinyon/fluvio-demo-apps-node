@@ -79,15 +79,3 @@ class FluvioProfile {
 module.exports = {
     FluvioProfile: FluvioProfile
 }
-
-/*
-var data = toml.parse(someTomlString);
-console.dir(data);
-
-try {
-toml.parse(someCrazyKnuckleHeadedTrblToml);
-} catch (e) {
-console.error("Parsing error on line " + e.line + ", column " + e.column +
-    ": " + e.message);
-}
-*/
