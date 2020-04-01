@@ -7,9 +7,9 @@ function produceMessages() {
     cli.parse();
 
     flvClient.connect(cli.server).then((sc) => {
-        console.log("Connected to SC: ", sc.addr());
+        console.log("Connected to SC: ", sc.serverAddress());
 
-        sc.leader(cli.topic, cli.partition).then((leader) => {
+        sc.replica(cli.topic, cli.partition).then((replica) => {
 
             stdin.addListener("data", (data) => {
                 let line = data.toString().trim();
@@ -17,7 +17,7 @@ function produceMessages() {
                     return;
                 }
 
-                leader.produce(line).then(len => {
+                replica.produce(line).then(len => {
                     console.log("ok!");
                 });
             });

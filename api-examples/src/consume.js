@@ -12,10 +12,18 @@ function consumeMessages() {
     })
 
     flvClient.connect(cli.server).then((sc) => {
-        console.log("Connected to SC: ", sc.addr());
+        console.log("Connected to SC:", sc.serverAddress());
 
-        sc.leader(cli.topic, cli.partition).then((leader) => {
-            leader.consume(emitter.emit.bind(emitter));
+        sc.replica(cli.topic, cli.partition).then((replica) => {
+            try {
+                replica.consume({
+                    offset: "earliest"
+                },
+                    emitter.emit.bind(emitter)
+                );
+            } catch (ex) {
+                console.log(ex);
+            }
         })
 
     });
