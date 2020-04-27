@@ -1,0 +1,25 @@
+{
+  "name": "fluvio-lib",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc -d"
+  },
+  "files": [
+    "lib"
+  ],
+  "author": "fluvio <admin@fluvio.io> (fluvio.io)",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "@fluvio/client": "^2.0.2",
+    "typescript": "^3.7.4"
+  },
+  "devDependencies": {
+    "@types/node": "^13.11.1",
+    "@types/request-promise": "^4.1.45"
+  }
+}

@@ -1,5 +1,8 @@
+_cache
+dist
+lib
+node_modules
 .DS_STORE
-.vscode
-**/dist
-**/.env
-**/node_modules
+.vscode/
+_token*
+.env
