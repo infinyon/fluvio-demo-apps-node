@@ -11,11 +11,11 @@
   "author": "fluvio <admin@fluvio.io> (fluvio.io)",
   "license": "Apache-2.0",
   "dependencies": {
+    "@fluvio/client": "^5.0.0-alpha.8",
     "chat-client": "file:chat-client",
     "chat-server": "file:chat-server"
   },
   "devDependencies": {
-    "@fluvio/client": "file:../../fluvio-client-node",
     "@types/mocha": "^8.0.3",
     "@types/node": "^14.11.5",
     "cypress": "^5.3.0",
