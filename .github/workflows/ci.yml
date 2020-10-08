@@ -32,11 +32,11 @@ jobs:
           npm install
           
           pushd ./chat-server
-          npm run start:dev &
+          npm run start &
           popd
 
           pushd ./chat-client
-          npm run start:dev &
+          npm run start &
           popd
 
           npm run test
