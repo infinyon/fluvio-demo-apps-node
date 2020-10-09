@@ -5,6 +5,7 @@
   "scripts": {
     "server:dev": "npm run start:dev --prefix chat-server",
     "client:dev": "npm run start:dev --prefix chat-client",
+    "cypress": "npx cypress open -C ./cypress.json",
     "test": "npx cypress run"
   },
   "author": "fluvio <admin@fluvio.io> (fluvio.io)",
