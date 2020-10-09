@@ -4,7 +4,7 @@
   "description": "Chat frontend client",
   "main": "index.js",
   "scripts": {
-    "start": "npx http-server ./dist -p 5051",
+    "start": "npx serve ./dist -l 5051 -s",
     "start:dev": "npx webpack-dev-server --mode development --open --hot",
     "build:dev": "npx webpack --mode development",
     "build": "npx webpack --mode production"
@@ -21,7 +21,7 @@
     "@types/recompose": "^0.30.7",
     "@types/yup": "^0.26.27",
     "html-webpack-plugin": "^4.0.0-beta.11",
-    "http-server": "^0.12.3",
+    "serve": "^11.3.2",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.4",

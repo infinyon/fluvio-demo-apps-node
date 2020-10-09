@@ -26,17 +26,20 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - name: Install & Run Test
+      - name: Install Chat Server & Run
+        run: |
+          pushd ./chat-app/chat-server
+          npm install
+          npm run start &
+          popd
+      - name: Install Chat Client
+        run: |
+          pushd ./chat-app/chat-client
+          npm install
+          npm run start &
+          popd
+      - name: Run Test
         run: |
           pushd ./chat-app
           npm install
-          
-          pushd ./chat-server
-          npm run start:dev &
-          popd
-
-          pushd ./chat-client
-          npm run start:dev &
-          popd
-
           npm run test
