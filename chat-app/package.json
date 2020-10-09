@@ -10,7 +10,7 @@
   "author": "fluvio <admin@fluvio.io> (fluvio.io)",
   "license": "Apache-2.0",
   "dependencies": {
-    "@fluvio/client": "^5.0.0-alpha.8",
+    "@fluvio/client": "^5.0.0-alpha.9",
     "chat-client": "file:chat-client",
     "chat-server": "file:chat-server"
   },
