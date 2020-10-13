@@ -13,13 +13,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
         node: [ '12', '14' ]
     steps:
       - name: Install Fluvio Local Cluster
-        uses: infinyon/fluvio@master
+        uses: infinyon/fluvio@feature/alpha_install_script
         with:
           cluster-type: local
+          version: v0.6.0-alpha.3
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v1
