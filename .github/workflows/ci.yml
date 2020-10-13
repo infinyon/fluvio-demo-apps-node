@@ -13,9 +13,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        rust: [stable]
-        node: [ '14' ]
+        os: [ubuntu-latest, macos-latest]
+        node: [ '12', '14' ]
     steps:
       - name: Install Fluvio Local Cluster
         uses: infinyon/fluvio@master
