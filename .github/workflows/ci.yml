@@ -42,4 +42,5 @@ jobs:
         run: |
           pushd ./chat-app
           npm install
+          npx cypress run -b chrome --headless --no-exit &
           npm run test

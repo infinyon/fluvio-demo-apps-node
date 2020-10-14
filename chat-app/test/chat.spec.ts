@@ -61,6 +61,7 @@ export class FluvioChatAppE2ETests {
   }
 
   @Test()
+  @Timeout(3000)
   @TestCase("Fetch users")
   public async fetchUsers() {
     const {
@@ -86,6 +87,7 @@ export class FluvioChatAppE2ETests {
   }
 
   @Test()
+  @Timeout(3000)
   @TestCase("Fetch messages")
   public async fetchMessages() {
     const {

@@ -7,7 +7,7 @@
     "client:dev": "npm run start:dev --prefix chat-client",
     "build": "sh ./build.sh",
     "cypress": "npx cypress open -C ./cypress.json",
-    "test": "npx cypress run && npx testyts"
+    "test": "npx testyts"
   },
   "author": "fluvio <admin@fluvio.io> (fluvio.io)",
   "license": "Apache-2.0",
