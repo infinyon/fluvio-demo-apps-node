@@ -38,9 +38,14 @@ jobs:
           npm install
           npm run start &
           popd
-      - name: Run Test
+      - name: Install and Run Cypress
         run: |
           pushd ./chat-app
           npm install
-          npx cypress run -b chrome --headless --no-exit &
+          npx cypress run -b chrome --headless --no-exit
+          popd
+      - name: Run Test Suite
+        run: |
+          pushd ./chat-app
           npm run test
+          
