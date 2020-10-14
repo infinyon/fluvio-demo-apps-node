@@ -66,8 +66,8 @@ export class FluvioChatAppE2ETests {
     const {
       records: { batches },
     } = await this.userConsumer.fetch({
-      index: 8,
-      from: OffsetFrom.End,
+      index: 0,
+      from: OffsetFrom.Beginning,
     });
 
     const events: string[] = batches
@@ -91,8 +91,8 @@ export class FluvioChatAppE2ETests {
     const {
       records: { batches },
     } = await this.chatConsumer.fetch({
-      index: 2,
-      from: OffsetFrom.End,
+      index: 0,
+      from: OffsetFrom.Beginning,
     });
 
     const events: string[] = batches
