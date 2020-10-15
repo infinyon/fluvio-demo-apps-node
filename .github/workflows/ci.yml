@@ -39,6 +39,7 @@ jobs:
           npm run start &
           popd
       - name: Install and Run Cypress
+        timeout-minutes: 1
         run: |
           pushd ./chat-app
           npm install
