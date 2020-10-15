@@ -61,54 +61,60 @@ export class FluvioChatAppE2ETests {
   }
 
   @Test()
-  @Timeout(3000)
-  @TestCase("Fetch users")
-  public async fetchUsers() {
-    const {
-      records: { batches },
-    } = await this.userConsumer.fetch({
-      index: 0,
-      from: OffsetFrom.Beginning,
-    });
+  @TestCase("Stream registration events")
+  public async checkUsers() {
+    let numRegistrationEvents = 0;
+    
+    const test = new Promise(async(resolve, reject) => {
+        await this.userConsumer.stream({
+            index: 0,
+            from: OffsetFrom.Beginning,
+          }, async (value) => {
+              if (value.includes("Registered")) {
+                  numRegistrationEvents += 1;
+              }
 
-    const events: string[] = batches
-      .map(({ records }) => {
-        return records[0].value;
-      })
-      .filter((value) => {
-        return value.includes("Registered");
-      });
+              if (numRegistrationEvents == 2) {
+                  return resolve(true)
+              }
+          });
+    })
+
+    await test
 
     expect.toBeEqual(
-      events.length,
+      numRegistrationEvents,
       2,
-      `expected two user registration events, found: ${events.length}`
+      `expected two user registration events, found: ${numRegistrationEvents}`
     );
   }
 
   @Test()
-  @Timeout(3000)
-  @TestCase("Fetch messages")
+  @TestCase("Stream message events")
   public async fetchMessages() {
-    const {
-      records: { batches },
-    } = await this.chatConsumer.fetch({
-      index: 0,
-      from: OffsetFrom.Beginning,
+    let numChatEvents = 0;
+    
+    const test = new Promise(async (resolve, reject) => {
+        await this.chatConsumer.stream({
+            index: 0,
+            from: OffsetFrom.Beginning,
+          }, async (value) => {
+              if (value.includes(this.text1) || value.includes(this.text2)) {
+                  numChatEvents += 1;
+              }
+
+              if (numChatEvents == 2) {
+                  return resolve(true)
+              }
+          });
     });
 
-    const events: string[] = batches
-      .map(({ records }) => {
-        return records[0].value;
-      })
-      .filter((value) => {
-        return value.includes(this.text1) || value.includes(this.text2);
-      });
+    await test
 
     expect.toBeEqual(
-      events.length,
+      numChatEvents,
       2,
-      `expected two chat events, found: ${events.length}`
+      `expected two chat events, found: ${numChatEvents}`
     );
   }
 }

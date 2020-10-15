@@ -39,11 +39,10 @@ jobs:
           npm run start &
           popd
       - name: Install and Run Cypress
-        timeout-minutes: 1
         run: |
           pushd ./chat-app
           npm install
-          npx cypress run -b chrome --headless --no-exit
+          npx cypress run -b chrome --headless --no-exit &
           popd
       - name: Run Test Suite
         run: |
