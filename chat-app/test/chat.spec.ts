@@ -61,6 +61,7 @@ export class FluvioChatAppE2ETests {
   }
 
   @Test()
+  @Timeout(1000 * 60 * 2)
   @TestCase("Stream registration events")
   public async checkUsers() {
     let numRegistrationEvents = 0;
@@ -90,6 +91,7 @@ export class FluvioChatAppE2ETests {
   }
 
   @XTest()
+  @Timeout(1000 * 60 * 2)
   @TestCase("Stream message events")
   public async fetchMessages() {
     let numChatEvents = 0;
