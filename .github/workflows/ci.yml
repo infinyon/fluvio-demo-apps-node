@@ -13,14 +13,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        rust: [stable]
-        node: [ '14' ]
+        os: [ubuntu-latest, macos-latest]
+        node: [ '12', '14' ]
     steps:
       - name: Install Fluvio Local Cluster
-        uses: infinyon/fluvio@master
+        uses: infinyon/fluvio@fix/action/fluvio/darwin
         with:
           cluster-type: local
+          version: v0.6.0-alpha.3
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v1
@@ -38,8 +38,10 @@ jobs:
           npm install
           npm run start &
           popd
-      - name: Run Test
+      - name: Install and Run Tests
         run: |
           pushd ./chat-app
           npm install
+          npx cypress run -b chrome --headless
           npm run test
+          popd
