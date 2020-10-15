@@ -89,7 +89,7 @@ export class FluvioChatAppE2ETests {
     );
   }
 
-  @Test()
+  @XTest()
   @TestCase("Stream message events")
   public async fetchMessages() {
     let numChatEvents = 0;
