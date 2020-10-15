@@ -60,7 +60,7 @@ export class FluvioChatAppE2ETests {
     expect.toBeEqual(chatTopic.name, this.chatTopic);
   }
 
-  @Test()
+  @XTest()
   @Timeout(1000 * 60 * 2)
   @TestCase("Stream registration events")
   public async checkUsers() {
