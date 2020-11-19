@@ -6,7 +6,7 @@ This repository provides demonstrable application examples using the `@fluvio/cl
 
 Each of the demo applications expect access to a Fluvio cluster. The cluster may be local or in the cloud.
 
-Read the [`getting-started`](https://nightly.fluvio.io/docs/getting-started/) guide to access a fluvio cluster.
+Read the [`getting-started`](https://fluvio.io/docs/getting-started/) guide to access a fluvio cluster.
 
 ## Demos
 
