@@ -13,13 +13,18 @@ Read the [`getting-started`](https://nightly.fluvio.io/docs/getting-started/) gu
 ```
 .
 ├── README.md
+├── bot-assistant
 └── chat-app
 
 1 directory, 1 file
 
 ```
+### Running the Bot Assistant Demo
 
-### **Running the Chat Application Demo**
+Navigate to the `bot-assistant` directory and follow instructions in the `README.md` file to get started.
 
-Navigate to the `chat-app` directory inside this repository. Read the `README.md` file to get started running the application.
+
+### Running the Chat Application Demo
+
+Navigate to the `chat-app` directory and follow instructions in the `README.md` file to get started running the application.
 
