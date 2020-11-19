@@ -16,9 +16,9 @@ Read the [`getting-started`](https://fluvio.io/docs/getting-started/) guide to a
 ├── bot-assistant
 └── chat-app
 
-1 directory, 1 file
-
+2 directories, 1 file
 ```
+
 ### Running the Bot Assistant Demo
 
 Navigate to the `bot-assistant` directory and follow instructions in the `README.md` file to get started.
