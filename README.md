@@ -4,22 +4,27 @@ This repository provides demonstrable application examples using the `@fluvio/cl
 
 ## Pre-Requisites
 
-Each of the demo applications expect access to a Fluvio cluster, either local or remote.
+Each of the demo applications expect access to a Fluvio cluster. The cluster may be local or in the cloud.
 
-Read the [`getting-started`](https://nightly.fluvio.io/docs/getting-started/) guide to access a fluvio cluster.
+Read the [`getting-started`](https://fluvio.io/docs/getting-started/) guide to access a fluvio cluster.
 
 ## Demos
 
 ```
 .
 ├── README.md
+├── bot-assistant
 └── chat-app
 
-1 directory, 1 file
-
+2 directories, 1 file
 ```
 
-### **Running the Chat Application Demo**
+### Running the Bot Assistant Demo
 
-Navigate to the `chat-app` directory inside this repository. Read the `README.md` file to get started running the application.
+Navigate to the `bot-assistant` directory and follow instructions in the `README.md` file to get started.
+
+
+### Running the Chat Application Demo
+
+Navigate to the `chat-app` directory and follow instructions in the `README.md` file to get started running the application.
 
