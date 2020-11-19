@@ -73,7 +73,7 @@
 }
 
 .assistant .header .overlay {
-	background-color: #bbbbbb;
+	background-color: #f6f6f6;
 	padding: 1px;
 	position: absolute;
 	top: 32px;
@@ -89,7 +89,7 @@
 }
 
 .assistant .header .status.off{
-	background-color: #dedede;
+	background-color: #FF3B28;
 }
 
 .assistant .header .status.on{
@@ -157,6 +157,11 @@
 	margin-right: 30px;
 }
 
+.assistant .msg-left .button {
+	margin: -2px 30px 7px 50px;
+}
+
+
 .assistant .msg-right {
 	position: relative;
 	right: 0px;
@@ -172,6 +177,13 @@
 	border-radius:7px;
 	word-break: break-all;
 }
+
+.assistant .msg-right .button {
+	float: right;
+}
+
+/* button  */
+
 .assistant .btn {
 	display: inline-block;
 	margin: 2px;
@@ -179,7 +191,6 @@
 }
 
 .assistant .button {
-	float: right;
 	width: max-content;
 	border-radius:15px;
 	padding: 10px;

@@ -250,9 +250,9 @@ window.onload = () => {
                 buttons.push(createElement("div", { "class": "btn" }, button));
             });
 
-            var msgRight = createElement("div", { "class": "msg-right", "id": groupId }, buttons);
+            var msgLeft = createElement("div", { "class": "msg-left", "id": groupId }, buttons);
 
-            document.querySelector(".msg-body").appendChild(msgRight);
+            document.querySelector(".msg-body").appendChild(msgLeft);
             scrollToBottom(".inner-body");
         }
     }
