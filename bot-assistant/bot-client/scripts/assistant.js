@@ -29,7 +29,7 @@ window.onload = () => {
         var status = createElement("div", { "id": "bot-status", "class": "status off" }),
             overlay = createElement("div", { "class": "overlay" }, status),
             bot = createElement("img", { "src": `${imgPath}/bot.svg`, "class": "bot" }),
-            title = createElement("span", {}, "Virtual Assistant"),
+            title = createElement("span", {}, "Bot Assistant"),
             close = createElement("img", { "src": `${imgPath}/close.svg`, "class": "close" }),
             reset = createElement("img", { "src": `${imgPath}/redo.svg` }),
             header = createElement("div", { "class": "header" }, [bot, overlay, title, close, reset]),
