@@ -1,0 +1,12 @@
+{
+  "name": "bot-assistant",
+  "version": "1.0.0",
+  "description": "Robot assistant implementation on Fluvio data streaming platform",
+  "scripts": {
+    "start:server": "npm run start:server --prefix bot-server",
+    "start:client": "npm run start:client --prefix bot-client",
+    "build": "sh ./build.sh"
+  },
+  "author": "fluvio <admin@fluvio.io> (fluvio.io)",
+  "license": "Apache-2.0"
+}

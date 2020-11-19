@@ -1,0 +1,217 @@
+{
+    "greetings": {
+        "sendRequest": {
+            "kind": "BotText",
+            "content": "Hi there! I'm Bot."
+        },
+        "next": "greetingChoices"
+    },
+    "greetingChoices": {
+        "sendRequest": {
+            "kind": "ChoiceRequest",
+            "groupId": "greetings",
+            "question": "Here are a few suggestions for you:",
+            "choices": [
+                {
+                    "itemId": "1",
+                    "content": "Setup a Fluvio Account"
+                },
+                {
+                    "itemId": "2",
+                    "content": "Start streaming with Node.Js"
+                },
+                {
+                    "itemId": "3",
+                    "content": "Start streaming with Rust"
+                },
+                {
+                    "itemId": "4",
+                    "content": "I have a question"
+                }
+            ]
+        }
+    },
+    "greetingChoicesResponse1": {
+        "onMatchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "greetings",
+            "itemId": 1
+        },
+        "next": "fluvioGettingStarted"
+    },
+    "greetingChoicesResponse2": {
+        "onMatchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "greetings",
+            "itemId": 2
+        },
+        "next": "startStreamingWithNode"
+    },
+    "greetingChoicesResponse3": {
+        "onMatchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "greetings",
+            "itemId": 3
+        },
+        "next": "startStreamingWithRust"
+    },
+    "greetingChoicesResponse4": {
+        "onMatchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "greetings",
+            "itemId": 4
+        },
+        "next": "startUserQuestionSession"
+    },
+    "fluvioGettingStarted": {
+        "sendRequest": {
+            "kind": "BotText",
+            "content": "Fluvio <a href=\"https://fluvio.io/docs/getting-started/\" target=\"_blank\">Getting Started</a> reference guide is a good place to start on how to create a Fluvio account"
+        },
+        "next": "moreSuggestions"
+    },
+    "startStreamingWithNode": {
+        "sendRequest": {
+            "kind": "BotText",
+            "content": "Checkout <a href=\"https://fluvio.io/tutorials/node/hello-world/\" target=\"_blank\">Hello World</a> app or the <a href=\"https://infinyon.github.io/fluvio-client-node/\" target=\"_blank\">Node API</a> library to get going"
+        },
+        "next": "moreSuggestions"
+    },
+    "startStreamingWithRust": {
+        "sendRequest": {
+            "kind": "BotText",
+            "content": "Checkout <a href=\"https://docs.rs/fluvio/\" target=\"_blank\">Rust API</a> library to get going"
+        },
+        "next": "moreSuggestions"
+    },
+    "startUserQuestionSession": {
+        "sendRequest": {
+            "kind": "StartChatSession",
+            "sessionId": "userQuestion",
+            "chatPrompt": "Type your question here...",
+            "chatText": "I enabled chat editor"
+        }
+    },
+    "getUserQuestionResponse": {
+        "onMatchResponse": {
+            "kind": "UserText",
+            "sessionId": "userQuestion"
+        },
+        "next": "endUserQuestionSession"
+    },
+    "endUserQuestionSession": {
+        "sendRequest": {
+            "kind": "EndChatSession",
+            "sessionId": "userQuestion"
+        },
+        "next": "questionReplyRequest"
+    },
+    "questionReplyRequest": {
+        "sendRequest": {
+            "kind": "ChoiceRequest",
+            "groupId": "replyQuestionChoice",
+            "question": "How should we reply?",
+            "choices": [
+                {
+                    "itemId": "1",
+                    "content": "Send me an email"
+                },
+                {
+                    "itemId": "2",
+                    "content": "Connect me to discord"
+                }
+            ]
+        }
+    },
+    "questionReplyResponse1": {
+        "onMatchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "replyQuestionChoice",
+            "itemId": 1
+        },
+        "next": "startEmailPromptSession"
+    },
+    "questionReplyResponse2": {
+        "onMatchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "replyQuestionChoice",
+            "itemId": 2
+        },
+        "next": "showDiscordInfo"
+    },
+    "startEmailPromptSession": {
+        "sendRequest": {
+            "kind": "StartChatSession",
+            "sessionId": "emailPrompt",
+            "chatPrompt": "Type your email here...",
+            "chatText": "What's your email address?"
+        }
+    },
+    "getEmailResponse": {
+        "onMatchResponse": {
+            "kind": "UserText",
+            "sessionId": "emailPrompt"
+        },
+        "next": "endEmailPromptSession"
+    },
+    "endEmailPromptSession": {
+        "sendRequest": {
+            "kind": "EndChatSession",
+            "sessionId": "emailPrompt"
+        },
+        "next": "confirmEmailReceived"
+    },
+    "showDiscordInfo": {
+        "sendRequest": {
+            "kind": "BotText",
+            "content": "Join our community at <a href=\"https://discordapp.com/invite/bBG2dTz\" target=\"_blank\">Discord</a>"
+        },
+        "next": "moreSuggestions"
+    },
+    "confirmEmailReceived": {
+        "sendRequest": {
+            "kind": "BotText",
+            "content": "Great, we'll have an answer shortly."
+        },
+        "next": "moreSuggestions"
+    },
+    "moreSuggestions": {
+        "sendRequest": {
+            "kind": "ChoiceRequest",
+            "groupId": "moreSuggestions",
+            "question": "More suggestions?",
+            "choices": [
+                {
+                    "itemId": "1",
+                    "content": "Sure"
+                },
+                {
+                    "itemId": "2",
+                    "content": "No, thanks"
+                }
+            ]
+        }
+    },
+    "moreSuggestionsResponse1": {
+        "onMatchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "moreSuggestions",
+            "itemId": 1
+        },
+        "next": "greetingChoices"
+    },
+    "moreSuggestionsResponse2": {
+        "onMatchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "moreSuggestions",
+            "itemId": 2
+        },
+        "next": "goodDay"
+    },
+    "goodDay": {
+        "sendRequest": {
+            "kind": "BotText",
+            "content": "Have a great day."
+        }
+    }
+}
