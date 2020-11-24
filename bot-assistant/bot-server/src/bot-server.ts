@@ -20,7 +20,7 @@ process.on("unhandledRejection", (e) => {
   process.exit(1);
 });
 
-// Provision Chat Assistant Server
+// Provision Bot Assistant Server
 const startServer = async () => {
   const app = express();
   const Server = http.createServer(app);
@@ -34,7 +34,7 @@ const startServer = async () => {
   // Start server
   Server.listen(PORT, () => {
     console.log(
-      `started chat assistant server at http://localhost:${PORT}...`
+      `started bot assistant server at http://localhost:${PORT}...`
     );
   });
 

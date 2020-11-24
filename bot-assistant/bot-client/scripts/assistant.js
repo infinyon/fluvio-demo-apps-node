@@ -104,17 +104,6 @@ window.onload = () => {
     }
 
     /**
-     * On WS Connection
-     */
-    function onWsOnline() {
-
-    }
-
-    function onWsOffline() {
-        var botStatus = document.getElementById("bot-status");
-    }
-
-    /**
      * On messages received from Websocket
      */
     function onMessageFromServer(value) {
