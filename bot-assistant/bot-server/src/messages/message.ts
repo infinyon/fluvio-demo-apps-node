@@ -1,15 +1,13 @@
 ///
 /// Chat Protocol Message Definitions
 ///
-import { Payload } from "./payload";
-
 export type SID = string;
 export type TimeStamp = string;
 
 export interface Message {
   sid: SID;
   from: From;
-  payload?: Payload;
+  payload?: any;
   timestamp: TimeStamp;
 }
 
@@ -20,7 +18,7 @@ export type From =
 /** 
  *  Package into message
  */
-export const buildMessage = (sid: SID, from: From, payload?: Payload) => {
+export const buildMessage = (sid: SID, from: From, payload?: any) => {
   return <Message>{
     sid: sid,
     from: from,

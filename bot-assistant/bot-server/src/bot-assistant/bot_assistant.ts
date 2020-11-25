@@ -9,7 +9,7 @@ import BotWorkflow from "./bot_workflow";
 class BotAssistant {
   private static _topic: string;
   private static _locked: boolean;
-  private static _send_queue: Array<{ sid: SID, payload: Payload }>;
+  private static _send_queue: Array<string>;
 
   // create topic & start consumer
   public async init(topic: string) {
@@ -24,8 +24,8 @@ class BotAssistant {
     return BotAssistant._topic;
   }
 
-  public enqueue(sid: SID, payload: Payload) {
-    BotAssistant._send_queue.push({ sid: sid, payload: payload });
+  public enqueue(msg: string) {
+    BotAssistant._send_queue.push(msg);
   }
 
   public dequeue() {
@@ -39,9 +39,9 @@ class BotAssistant {
 
     while (BotAssistant._send_queue.length) {
       BotAssistant._locked = true;
-      const val = BAS.dequeue();
-      if (val) {
-        await sendResponse(val.sid, val.payload);
+      const msg = BAS.dequeue();
+      if (msg) {
+        await sendResponse(msg);
 
       }
       BotAssistant._locked = false;
@@ -81,20 +81,20 @@ exports.onBotMessage = botAssistantEvents.on(
   async (sid: SID, payload: Payload) => {
     console.log(`-- BotAssist <= [${botAssistantEvents.BOT_MESSAGE}] ${JSON.stringify(payload)}`);
 
-    BAS.enqueue(sid, payload);
+    const msg_obj = buildMessage(sid, "Server", payload);
+    const msg = JSON.stringify(msg_obj);
+
+    BAS.enqueue(msg);
     await BAS.flush();
   }
 );
 
 /**
  * Send response to Fluvio data stream
- *  @param sid - Session id
- *  @param payload - Response payload
+ *  @param msg - Response message
  */
-async function sendResponse(sid: SID, payload: Payload) {
-  const response = buildMessage(sid, "Server", payload);
-  const response_msg = JSON.stringify(response);
-  await produceMessage(BAS.topic(), response_msg);
+async function sendResponse(msg: string) {
+  await produceMessage(BAS.topic(), msg);
 }
 
 

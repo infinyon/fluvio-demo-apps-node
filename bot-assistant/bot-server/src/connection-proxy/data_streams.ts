@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import { createTopicIfNotFound, fetchMessages, startConsumerStream, produceMessage } from "./fluvio";
 import { wsSessionEvents } from "./ws_sessions";
-import { Message, Payload, SID, buildMessage } from "../messages";
+import { Message, SID, buildMessage } from "../messages";
 
 type Messages = Array<Message>;
 
@@ -105,7 +105,7 @@ dataStreamingEvents.on(
 
     console.log(`-- DataStream <= [${dataStreamingEvents.CLIENT_MESSAGE}] ${sid} - ${payload_msg}`);
 
-    const payload: Payload = JSON.parse(payload_msg);
+    const payload = JSON.parse(payload_msg);
     const message = buildMessage(sid, "Client", payload);
     await produceMessage(DSS.topic(), JSON.stringify(message));
   }
