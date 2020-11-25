@@ -32,7 +32,7 @@
         }
     },
     "greetingChoicesResponse1": {
-        "onMatchResponse": {
+        "matchResponse": {
             "kind": "ChoiceResponse",
             "groupId": "greetings",
             "itemId": 1
@@ -40,7 +40,7 @@
         "next": "fluvioGettingStarted"
     },
     "greetingChoicesResponse2": {
-        "onMatchResponse": {
+        "matchResponse": {
             "kind": "ChoiceResponse",
             "groupId": "greetings",
             "itemId": 2
@@ -48,7 +48,7 @@
         "next": "startStreamingWithNode"
     },
     "greetingChoicesResponse3": {
-        "onMatchResponse": {
+        "matchResponse": {
             "kind": "ChoiceResponse",
             "groupId": "greetings",
             "itemId": 3
@@ -56,7 +56,7 @@
         "next": "startStreamingWithRust"
     },
     "greetingChoicesResponse4": {
-        "onMatchResponse": {
+        "matchResponse": {
             "kind": "ChoiceResponse",
             "groupId": "greetings",
             "itemId": 4
@@ -93,7 +93,7 @@
         }
     },
     "getUserQuestionResponse": {
-        "onMatchResponse": {
+        "matchResponse": {
             "kind": "UserText",
             "sessionId": "userQuestion"
         },
@@ -124,7 +124,7 @@
         }
     },
     "questionReplyResponse1": {
-        "onMatchResponse": {
+        "matchResponse": {
             "kind": "ChoiceResponse",
             "groupId": "replyQuestionChoice",
             "itemId": 1
@@ -132,7 +132,7 @@
         "next": "startEmailPromptSession"
     },
     "questionReplyResponse2": {
-        "onMatchResponse": {
+        "matchResponse": {
             "kind": "ChoiceResponse",
             "groupId": "replyQuestionChoice",
             "itemId": 2
@@ -148,7 +148,7 @@
         }
     },
     "getEmailResponse": {
-        "onMatchResponse": {
+        "matchResponse": {
             "kind": "UserText",
             "sessionId": "emailPrompt"
         },
@@ -193,7 +193,7 @@
         }
     },
     "moreSuggestionsResponse1": {
-        "onMatchResponse": {
+        "matchResponse": {
             "kind": "ChoiceResponse",
             "groupId": "moreSuggestions",
             "itemId": 1
@@ -201,7 +201,7 @@
         "next": "greetingChoices"
     },
     "moreSuggestionsResponse2": {
-        "onMatchResponse": {
+        "matchResponse": {
             "kind": "ChoiceResponse",
             "groupId": "moreSuggestions",
             "itemId": 2

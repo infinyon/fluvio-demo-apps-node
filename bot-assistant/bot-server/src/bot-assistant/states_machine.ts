@@ -1,31 +1,35 @@
 import Fs from "fs";
-import { Payload } from "../messages";
+import {
+    BotText,
+    UserText,
+    ChoiceRequest,
+    ChoiceResponse,
+    StartChatSession,
+    EndChatSession
+} from "../messages";
+
+type name = string;
 
 /**
  * State definitions
  */
-export type StateMachine = Map<string, State>;
+export type StateMachine = Map<name, State>;
 
 export interface State {
-    sendRequest?: Payload,
-    onMatchResponse?: OnMatchResponse;
+    sendRequest?: SendRequest,
+    matchResponse?: MatchResponse;
     next?: string,
 }
 
-export type OnMatchResponse =
-    | ChoiceResponseNext
-    | UserTextNext
+export type SendRequest =
+    | BotText
+    | ChoiceRequest
+    | StartChatSession
+    | EndChatSession;
 
-export interface ChoiceResponseNext {
-    kind: "ChoiceResponse",
-    groupId: string,
-    itemId: string,
-}
-
-export interface UserTextNext {
-    kind: "UserText",
-    sessionId: string,
-}
+export type MatchResponse =
+    | ChoiceResponse
+    | UserText
 
 /**
  * Load state machine from file

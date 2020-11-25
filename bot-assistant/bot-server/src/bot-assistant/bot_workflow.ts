@@ -54,10 +54,10 @@ class BotWorkflow {
 
     getChoiceResponseState(choiceResponse: ChoiceResponse) {
         for (let [key, state] of BotWorkflow._stateMachine.entries()) {
-            if (state.onMatchResponse &&
-                state.onMatchResponse.kind == choiceResponse.kind &&
-                state.onMatchResponse.groupId == choiceResponse.groupId &&
-                state.onMatchResponse.itemId == choiceResponse.itemId) {
+            if (state.matchResponse &&
+                state.matchResponse.kind == choiceResponse.kind &&
+                state.matchResponse.groupId == choiceResponse.groupId &&
+                state.matchResponse.itemId == choiceResponse.itemId) {
                 return key;
             }
         }
@@ -68,9 +68,9 @@ class BotWorkflow {
 
     getUserTextState(userText: UserText) {
         for (let [key, state] of BotWorkflow._stateMachine.entries()) {
-            if (state.onMatchResponse &&
-                state.onMatchResponse.kind == "UserText" &&
-                state.onMatchResponse.sessionId == userText.sessionId) {
+            if (state.matchResponse &&
+                state.matchResponse.kind == "UserText" &&
+                state.matchResponse.sessionId == userText.sessionId) {
                 return key;
             }
         }

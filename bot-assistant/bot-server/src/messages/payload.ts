@@ -30,7 +30,7 @@ export interface OperatorText {
 export interface UserText {
   kind: "UserText",
   sessionId: string,
-  content: string,
+  content?: string,
 }
 
 export interface ChoiceRequest {
@@ -49,7 +49,7 @@ export interface ChoiceResponse {
   kind: "ChoiceResponse",
   groupId: string,
   itemId: string,
-  content: string,
+  content?: string,
 }
 
 export interface StartChatSession {
