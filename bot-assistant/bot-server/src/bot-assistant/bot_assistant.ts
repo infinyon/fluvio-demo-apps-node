@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { Message, Payload, SID, buildMessage, isInitPayload } from "../messages";
+import { Message, Payload, SID, buildMessage } from "../messages";
 import { startConsumerStream, produceMessage, sleep } from "./fluvio";
 import BotWorkflow from "./bot_workflow";
 
@@ -66,10 +66,10 @@ exports.onFluvioMessage = botAssistantEvents.on(
     if (message.from == "Client") {
       console.log(`-- BotAssist <= [${botAssistantEvents.FLUVIO_MESSAGE}] ${msg}`);
 
-      if (isInitPayload(message.payload)) {
-        BotWorkflow.nextMessages(message.sid);
-      } else {
+      if (message.payload) {
         BotWorkflow.nextMessages(message.sid, message.payload);
+      } else {
+        BotWorkflow.nextMessages(message.sid);
       }
     }
   }

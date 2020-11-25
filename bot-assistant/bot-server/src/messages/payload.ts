@@ -3,7 +3,6 @@
 ///
 
 export type Payload =
-  | Init
   | BotText
   | OperatorText
   | UserText
@@ -11,10 +10,6 @@ export type Payload =
   | ChoiceResponse
   | StartChatSession
   | EndChatSession;
-
-export interface Init {
-  kind: "Init"
-}
 
 export interface BotText {
   kind: "BotText",
@@ -63,10 +58,3 @@ export interface EndChatSession {
   kind: "EndChatSession",
   sessionId: string,
 }
-
-/**
- * Check if Payload is init
- */
-export const isInitPayload = (payload: Payload) => {
-  return (payload.kind === "Init")
-};

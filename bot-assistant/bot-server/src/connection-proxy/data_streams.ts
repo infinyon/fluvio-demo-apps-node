@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import { createTopicIfNotFound, fetchMessages, startConsumerStream, produceMessage } from "./fluvio";
 import { wsSessionEvents } from "./ws_sessions";
-import { Message, Payload, SID, buildMessage, isInitPayload } from "../messages";
+import { Message, Payload, SID, buildMessage } from "../messages";
 
 type Messages = Array<Message>;
 
@@ -137,10 +137,7 @@ exports.onFluvioMessage = dataStreamingEvents.on(
  *  @param sid - Session id
  */
 async function produceInit(sid: SID) {
-  const initPayload: Payload = {
-    kind: "Init"
-  }
-  const message = buildMessage(sid, "Client", initPayload);
+  const message = buildMessage(sid, "Client");
 
   await produceMessage(DSS.topic(), JSON.stringify(message));
 }
@@ -152,7 +149,7 @@ async function produceInit(sid: SID) {
 async function playbackDataStream(sid: SID) {
   const messages = DSS.getDataStream(sid);
   messages?.forEach(message => {
-    if (!isInitPayload(message.payload)) {
+    if (message.payload) {
       wsSessionEvents.emit(wsSessionEvents.FROM_SERVER, message.sid, message.payload);
     }
   });

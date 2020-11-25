@@ -9,7 +9,7 @@ export type TimeStamp = string;
 export interface Message {
   sid: SID;
   from: From;
-  payload: Payload;
+  payload?: Payload;
   timestamp: TimeStamp;
 }
 
@@ -20,7 +20,7 @@ export type From =
 /** 
  *  Package into message
  */
-export const buildMessage = (sid: SID, from: From, payload: Payload) => {
+export const buildMessage = (sid: SID, from: From, payload?: Payload) => {
   return <Message>{
     sid: sid,
     from: from,
