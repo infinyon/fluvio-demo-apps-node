@@ -1,50 +1,48 @@
 import http from "http";
 import express from "express";
-import Path from "path"
-import WebSocket from "./connection-proxy/ws_server";
-import DataStreams from "./connection-proxy/data_streams";
-import BotWorkflow from "./bot-assistant/bot_workflow";
-import BotAssistant from "./bot-assistant/bot_assistant";
+import { WsProxy } from "./proxy-service/ws-proxy";
+import { DataStreams } from "./proxy-service/data-streams";
+import { StateMachine, loadStateMachine } from "./workflow-service/state-machine";
+import { WorkflowController } from "./workflow-service/workflow-controller";
 
 const PORT = 9998;
-const DATA_STREAM_TOPIC = "chat-assist-messages";
-
-// Catch-all for Promise exceptions
-process.on("uncaughtException", (e) => {
-  console.log(e);
-  process.exit(1);
-});
-
-process.on("unhandledRejection", (e) => {
-  console.log(e);
-  process.exit(1);
-});
+const DATA_STREAM_TOPIC = "bot-assist-messages";
 
 // Provision Bot Assistant Server
 const startServer = async () => {
-  const app = express();
-  const Server = http.createServer(app);
+    const app = express();
+    const Server = http.createServer(app);
 
-  // Initialize data streaming
-  await DataStreams.init(DATA_STREAM_TOPIC);
+    // Attach Server to Websocket
+    const wsProxy = new WsProxy();
+    wsProxy.init(Server);
 
-  // Attach Server to Websocket
-  WebSocket.init(Server);
+    // Start server
+    Server.listen(PORT, () => {
+        console.log(
+            `started bot assistant server at http://localhost:${PORT}...`
+        );
+    });
 
-  // Start server
-  Server.listen(PORT, () => {
-    console.log(
-      `started bot assistant server at http://localhost:${PORT}...`
-    );
-  });
+    // Initialize data streaming
+    const dataStreams = new DataStreams();
+    await dataStreams.init(DATA_STREAM_TOPIC, wsProxy);
 
-  // Initialize work
-  BotWorkflow.init(Path.join(__dirname, "..", "state-machine.json"));
-
-  // Initialize bot assistant
-  await BotAssistant.init(DATA_STREAM_TOPIC);
-
+    // Initialize workflow service
+    let filePath = getFileName();
+    const stateMachine: StateMachine = loadStateMachine(filePath);
+    const workflowController = new WorkflowController();
+    await workflowController.init(DATA_STREAM_TOPIC, stateMachine);
 };
+
+// read state machine file from command line
+function getFileName() {
+    if (process.argv.length != 3) {
+        console.log("Usage: node bot-server.js <state-machine.json>");
+        process.exit(1);
+    }
+    return process.argv[2];
+}
 
 // Start Server
 startServer();

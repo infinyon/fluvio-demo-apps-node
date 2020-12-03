@@ -2,67 +2,81 @@
 //
 // Copyright (c) 2020, InfinyOn Inc.
 //
-const imgPath = "img/assistant";
-const webSocketURL = "ws://localhost:9998/";
 
 window.onload = () => {
-    var sessionId = "";
     var webSocket = null;
+    var sessionId = "";
 
-    /**
-     * Load external javascript libraries
-     */
+    // Load reconnecting socket to DOM
     loadScript("scripts/reconnecting-socket.js");
 
-    /**
-     * Load assistant button and dialog box
-     */
+    // Create and attach Bot Assistant HTML elements
     function loadAssistant() {
-        // Append assistant button
-        var note = createElement("img", { "src": `${imgPath}/note.svg` }),
-            assistButton = createElement("button", {}, note);
+        // Add assistant button
+        var note = createElement("img", { "src": `img/assistant/note.svg` }),
+            aButton = createElement("button", {}, note);
 
-        assistButton.addEventListener('click', onOpenAssistDialog, false);
-        document.querySelector(".assistant").appendChild(assistButton);
-
-        // Append assistant dialog box
+        // Append assistant dialog
         var status = createElement("div", { "id": "bot-status", "class": "status off" }),
             overlay = createElement("div", { "class": "overlay" }, status),
-            bot = createElement("img", { "src": `${imgPath}/bot.svg`, "class": "bot" }),
+            bot = createElement("img", { "src": `img/assistant/bot.svg`, "class": "bot" }),
             title = createElement("span", {}, "Bot Assistant"),
-            close = createElement("img", { "src": `${imgPath}/close.svg`, "class": "close" }),
-            reset = createElement("img", { "src": `${imgPath}/redo.svg` }),
-            header = createElement("div", { "class": "header" }, [bot, overlay, title, close, reset]),
+            aDialogClose = createElement("img", { "src": `img/assistant/close.svg`, "class": "close" }),
+            aDialogReset = createElement("img", { "src": `img/assistant/redo.svg` }),
+            header = createElement("div", { "class": "header" }, [bot, overlay, title, aDialogClose, aDialogReset]),
             msg_body = createElement("div", { "class": "msg-body" }),
             inner_body = createElement("div", { "class": "inner-body" }, msg_body),
             body = createElement("div", { "class": "body-wrapper" }, inner_body),
             user_msg = createElement("div", {
                 "id": "user-msg",
                 "class": "textareaElement",
-                "placeholder": "Choose an Option",
+                "placeholder": "Type here",
                 "contenteditable": "false"
             }),
             footer = createElement("div", { "class": "footer" }, user_msg),
-            assistDialog = createElement("div", { "class": "chat" },
-                [header, body, footer]);
+            aDialog = createElement("div", { "class": "chat" }, [header, body, footer]);
 
-        reset.addEventListener('click', onResetSession, false);
-        close.addEventListener('click', onCloseAssistDialog, false);
-        document.querySelector(".assistant").appendChild(assistDialog);
+        // Attach event listeners
+        aButton.addEventListener('click', onOpenDialog, false);
+        aDialogReset.addEventListener('click', onResetSession, false);
+        aDialogClose.addEventListener('click', onCloseDialog, false);
+
+        // Add to document
+        document.querySelector(".assistant").appendChild(aButton);
+        document.querySelector(".assistant").appendChild(aDialog);
     }
 
-    /**
-     * Open WS Connection and add handlers
-     */
-    function openWSConnection() {
+    // On open assistant dialog callback
+    function onOpenDialog() {
+        document.querySelector(".assistant button").style.display = "none";
+        document.querySelector(".assistant .chat").style.display = "block";
+        openWSConnection();
+    }
 
+    // On close assistant dialog callback
+    function onCloseDialog() {
+        document.querySelector(".assistant .chat").style.display = "none";
+        document.querySelector(".assistant button").style.display = "block";
+    }
+
+    // Clear the cookie and restart connection to create a new session.
+    function onResetSession() {
+        document.cookie = "Fluvio-Bot-Assistant=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+
+        closeWsConnection();
+        clearMessages();
+        openWSConnection();
+    }
+
+    // Open WebSocket connection
+    function openWSConnection() {
         try {
             if (webSocket != null) {
                 return; // already connected
             }
 
-            logOutput(`Connecting to: ${webSocketURL}`);
-            webSocket = new ReconnectingWebSocket(webSocketURL);
+            logOutput("Connecting to: ws://localhost:9998/");
+            webSocket = new ReconnectingWebSocket("ws://localhost:9998/");
 
             webSocket.onopen = function (openEvent) {
                 clearMessages();
@@ -76,15 +90,12 @@ window.onload = () => {
             };
 
             webSocket.onerror = function (errorEvent) {
-                logOutput(`Error: ${JSON.stringify(errorEvent)}, try again ...`);
+                logOutput(`Error: ${JSON.stringify(errorEvent)}`);
             };
 
             webSocket.onmessage = function (messageEvent) {
                 var wsMsg = messageEvent.data;
-                if (wsMsg.indexOf("error") > 0) {
-                    logOutput(`error: ${wsMsg.error}`);
-                    return;
-                }
+                logOutput(`<== ${wsMsg}`);
                 onMessageFromServer(wsMsg);
             };
 
@@ -93,9 +104,7 @@ window.onload = () => {
         }
     }
 
-    /**
-     * Close WS Connection
-     */
+    // Close WS Connection
     function closeWsConnection() {
         if (webSocket.open) {
             webSocket.close();
@@ -103,32 +112,27 @@ window.onload = () => {
         }
     }
 
-    /**
-     * On messages received from Websocket
-     */
-    function onMessageFromServer(value) {
-        value = JSON.parse(value);
 
-        switch (value.kind) {
+    // On messages received from Websocket
+    function onMessageFromServer(value) {
+        const message = JSON.parse(value);
+        switch (message.kind) {
             case "BotText":
-                showBotText(value.content);
+                showBotText(message.content);
                 break;
             case "UserText":
-                showUserText(value.content);
-                break;
-            case "OperatorText":
-                showOperatorText(value.name, value.content);
+                showUserText(message.content);
                 break;
             case "ChoiceRequest":
-                showBotText(value.question);
-                showChoiceButtons(value.groupId, value.choices);
+                showBotText(message.question);
+                showChoiceButtons(message.groupId, message.choices);
                 break;
             case "ChoiceResponse":
-                choicesToButton(value.groupId, value.content);
+                choicesToButton(message.groupId, message.content);
                 break;
             case "StartChatSession":
-                sessionId = value.sessionId;
-                enableChatEditor(value.chatPrompt, value.chatText);
+                sessionId = message.sessionId;
+                enableChatEditor(message.chatPrompt, message.chatText);
                 break;
             case "EndChatSession":
                 disableChatEditor();
@@ -136,63 +140,12 @@ window.onload = () => {
         };
     }
 
-    /**
-     * Open Assistant dialog box
-     */
-    function onOpenAssistDialog() {
-        document.querySelector(".assistant button").style.display = "none";
-        document.querySelector(".assistant .chat").style.display = "block";
-        openWSConnection();
-    }
-
-    /**
-     * Close Assistant dialog box
-     */
-    function onCloseAssistDialog() {
-        document.querySelector(".assistant .chat").style.display = "none";
-        document.querySelector(".assistant button").style.display = "block";
-    }
-
-    /**
-     * Clear the cookie and restart connection to create a new session.
-     */
-    function onResetSession() {
-        document.cookie = "Fluvio-Chat-Assistant=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-
-        closeWsConnection();
-        clearMessages();
-        openWSConnection();
-    }
-
-
-    /**
-     * Capture chat text from and send to WS server
-     */
-    function onEditorKeys(e) {
-        var chatBox = document.getElementById("user-msg");
-
-        if (e.code == 'Enter' && chatBox.textContent.length > 0) {
-            e.preventDefault();
-
-            chatBox.setAttribute("contenteditable", false);
-            const content = chatBox.textContent;
-
-            sendWsMessage(JSON.stringify({
-                kind: "UserText",
-                sessionId: sessionId,
-                content: content,
-            }));
-
-            showUserText(content);
-            chatBox.innerHTML = '';
-        }
-    }
-
+    // Show text from bot assistant
     function showBotText(content) {
         if (content.length > 0) {
             removeDuplicateAvatar("bot");
 
-            var img = createElement("img", { "src": `${imgPath}/bot.svg` }),
+            var img = createElement("img", { "src": `img/assistant/bot.svg` }),
                 avatar = createElement("div", { "class": "avatar", "id": "bot" }, img),
                 msg = createElement("div", { "class": "msg" }, content),
                 msgLeft = createElement("div", { "class": "msg-left" }, [msg, avatar]);
@@ -202,6 +155,7 @@ window.onload = () => {
         }
     }
 
+    // Show text from user interactive session
     function showUserText(content) {
         if (content.length > 0) {
             var msg = createElement("div", { "class": "msg" }, content),
@@ -212,20 +166,7 @@ window.onload = () => {
         }
     }
 
-    function showOperatorText(name, content) {
-        if (content.length > 0) {
-            removeDuplicateAvatar("operator");
-
-            var msg = createElement("div", { "class": "msg" }, content),
-                operator = createElement("div", { "class": "operator", "id": "operator" },
-                    name.charAt(0).toUpperCase()),
-                msgLeft = createElement("div", { "class": "msg-left" }, [msg, operator]);
-
-            document.querySelector(".msg-body").appendChild(msgLeft);
-            scrollToBottom(".inner-body");
-        }
-    }
-
+    // Show choices
     function showChoiceButtons(groupId, choices) {
         if (choices.length > 0) {
             var buttons = [];
@@ -246,17 +187,19 @@ window.onload = () => {
         }
     }
 
+    // Callback invoked on user selection
     function pickChoice(groupId, itemId, content) {
         choicesToButton(groupId, content);
 
-        sendWsMessage(JSON.stringify({
+        sendWsMessage({
             kind: "ChoiceResponse",
             groupId: groupId,
             itemId: itemId,
             content: content,
-        }));
+        });
     }
 
+    // Swap choices with a button representing the selection
     function choicesToButton(groupId, content) {
         document.getElementById(groupId).remove();
 
@@ -268,6 +211,7 @@ window.onload = () => {
         scrollToBottom(".inner-body");
     }
 
+    // On multiple bot messages, ensure avatar is only displayed on last entry
     function removeDuplicateAvatar(id) {
         var messages = document.querySelector('.msg-body').children;
         if (messages.length > 0) {
@@ -280,6 +224,7 @@ window.onload = () => {
         }
     }
 
+    // Enable interactive chat
     function enableChatEditor(chatPrompt, chatText) {
         if (chatText) {
             showBotText(chatText);
@@ -292,6 +237,7 @@ window.onload = () => {
         chatBox.addEventListener("keydown", onEditorKeys, false);
     }
 
+    // Disable interactive chat
     function disableChatEditor() {
         var chatBox = document.getElementById("user-msg");
         chatBox.addEventListener("keydown", {}, false);
@@ -300,28 +246,77 @@ window.onload = () => {
         chatBox.setAttribute("placeholder", "Choose an Option");
     }
 
+    // Scroll to last messages
     function scrollToBottom(tag) {
         var div = document.querySelector(tag);
         div.scrollTop = div.scrollHeight - div.clientHeight;
     }
 
+    // Clear messages in both editors
     function clearMessages() {
-        removeAllChildNodes(document.querySelector('.msg-body'));
-    }
-
-    function removeAllChildNodes(parent) {
+        var parent = document.querySelector('.msg-body');
         while (parent.firstChild) {
             parent.removeChild(parent.firstChild);
         }
+
+        var debugOutput = document.getElementById("debugOutput");
+        if (debugOutput) {
+            debugOutput.value = "";
+        }
     }
 
-    /*******************************
-     *  Helper functions
-     *******************************/
+    // Capture editor keys
+    function onEditorKeys(e) {
+        var chatBox = document.getElementById("user-msg");
 
-    /**
-     *  Create DOM element
-     */
+        if (e.code == 'Enter' && chatBox.textContent.length > 0) {
+            e.preventDefault();
+
+            const content = chatBox.textContent;
+            sendWsMessage({
+                kind: "UserText",
+                sessionId: sessionId,
+                content: content,
+            });
+            showUserText(content);
+
+            chatBox.innerHTML = '';
+        }
+    }
+
+    // Send a message on WebSocket
+    function sendWsMessage(message) {
+        if (webSocket.readyState != WebSocket.OPEN) {
+            logOutput("WebSocket is not connected: " + webSocket.readyState);
+            return;
+        }
+
+        const msgObj = JSON.stringify(message)
+        logOutput(`==> ${msgObj}`);
+
+        webSocket.send(msgObj);
+    }
+
+    //  Load external javascript file to DOM
+    function loadScript(fileName) {
+        var js_script = document.createElement('script');
+        js_script.type = "text/javascript";
+        js_script.src = fileName;
+        js_script.async = false;
+        document.getElementsByTagName('head')[0].appendChild(js_script);
+    }
+
+    // Log output in the "debugOutput" textarea (if available) and the console
+    function logOutput(value) {
+        var debugOutput = document.getElementById("debugOutput");
+        if (debugOutput) {
+            debugOutput.value += value + "\n\n";
+            debugOutput.scrollTop = debugOutput.scrollHeight;
+        }
+        console.log(value);
+    }
+
+    // Create element utility function
     function createElement(element, attribute, inner) {
         if (typeof (element) === "undefined") { return false; }
         if (typeof (inner) === "undefined") { inner = ""; }
@@ -345,39 +340,6 @@ window.onload = () => {
         return el;
     }
 
-    /**
-     *  Load external javascript file to DOM
-     */
-    function loadScript(fileName) {
-        var js_script = document.createElement('script');
-        js_script.type = "text/javascript";
-        js_script.src = fileName;
-        js_script.async = false;
-        document.getElementsByTagName('head')[0].appendChild(js_script);
-    }
-
-    /**
-     * Send a message on WebSocket
-     */
-    function sendWsMessage(msg) {
-        if (webSocket.readyState != WebSocket.OPEN) {
-            logOutput("WebSocket is not connected: " + webSocket.readyState);
-            return;
-        }
-        webSocket.send(msg);
-    }
-
-    /**
-     * Log to console and debug window if enabled
-     */
-    function logOutput(value) {
-        var debugOutput = document.getElementById("debugOutput");
-        if (debugOutput) {
-            debugOutput.value += value + "\n\n";
-            debugOutput.scrollTop = debugOutput.scrollHeight;
-        }
-        console.log(value);
-    }
-
+    // Call main function
     loadAssistant();
 };

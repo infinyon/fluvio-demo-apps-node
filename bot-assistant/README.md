@@ -22,20 +22,22 @@ This will run the `./build.sh` script, which will install the dependencies and b
 Open a new terminal window, navigate to `bot-assistant` directory and start the server:
 
 ```bash
-npm run start:server
+PARAMS=state-machine.json npm run start:server
 ```
 The server connects to Fluvio creates a topic and listens for client messages. If if the server successfully started, you should see the following message.
 
 ```bash
-proxy: topic 'chat-assist-messages' created
+started bot assistant server at http://localhost:9998...
+topic: 'bot-assist-messages' created
+after topic add
 proxy: fetched 0 messages
+after fetch
+proxy: listening for events ... 
 ┌───────────────────┬─────┬────────┐
 │ (iteration index) │ Key │ Values │
 ├───────────────────┼─────┼────────┤
 └───────────────────┴─────┴────────┘
-started chat assistant server at http://localhost:9998...
-proxy: listening for events ... 
-bot: listening for events ... 
+workflow: listening for events ... 
 ```
 
 ### Run Bot Client
