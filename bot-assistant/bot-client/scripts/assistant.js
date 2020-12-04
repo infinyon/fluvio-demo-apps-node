@@ -2,6 +2,23 @@
 //
 // Copyright (c) 2020, InfinyOn Inc.
 //
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 window.onload = () => {
     var webSocket = null;
@@ -24,22 +41,22 @@ window.onload = () => {
             aDialogClose = createElement("img", { "src": `img/assistant/close.svg`, "class": "close" }),
             aDialogReset = createElement("img", { "src": `img/assistant/redo.svg` }),
             header = createElement("div", { "class": "header" }, [bot, overlay, title, aDialogClose, aDialogReset]),
-            msg_body = createElement("div", { "class": "msg-body" }),
-            inner_body = createElement("div", { "class": "inner-body" }, msg_body),
-            body = createElement("div", { "class": "body-wrapper" }, inner_body),
-            user_msg = createElement("div", {
+            msgBody = createElement("div", { "class": "msg-body" }),
+            innerBody = createElement("div", { "class": "inner-body" }, msgBody),
+            body = createElement("div", { "class": "body-wrapper" }, innerBody),
+            userMsg = createElement("div", {
                 "id": "user-msg",
                 "class": "textareaElement",
                 "placeholder": "Type here",
                 "contenteditable": "false"
             }),
-            footer = createElement("div", { "class": "footer" }, user_msg),
+            footer = createElement("div", { "class": "footer" }, userMsg),
             aDialog = createElement("div", { "class": "chat" }, [header, body, footer]);
 
         // Attach event listeners
         aButton.addEventListener('click', onOpenDialog, false);
-        aDialogReset.addEventListener('click', onResetSession, false);
         aDialogClose.addEventListener('click', onCloseDialog, false);
+        aDialogReset.addEventListener('click', onResetSession, false);
 
         // Add to document
         document.querySelector(".assistant").appendChild(aButton);
@@ -94,9 +111,9 @@ window.onload = () => {
             };
 
             webSocket.onmessage = function (messageEvent) {
-                var wsMsg = messageEvent.data;
-                logOutput(`<== ${wsMsg}`);
-                onMessageFromServer(wsMsg);
+                var serverMsg = messageEvent.data;
+                logOutput(`<== ${serverMsg}`);
+                onMessageFromServer(serverMsg);
             };
 
         } catch (exception) {
@@ -111,7 +128,6 @@ window.onload = () => {
             webSocket = null;
         }
     }
-
 
     // On messages received from Websocket
     function onMessageFromServer(value) {
@@ -138,6 +154,19 @@ window.onload = () => {
                 disableChatEditor();
                 break;
         };
+    }
+
+    // Send a message on WebSocket
+    function sendWsMessage(message) {
+        if (webSocket.readyState != WebSocket.OPEN) {
+            logOutput("WebSocket is not connected: " + webSocket.readyState);
+            return;
+        }
+
+        const msgObj = JSON.stringify(message)
+        logOutput(`==> ${msgObj}`);
+
+        webSocket.send(msgObj);
     }
 
     // Show text from bot assistant
@@ -282,19 +311,6 @@ window.onload = () => {
 
             chatBox.innerHTML = '';
         }
-    }
-
-    // Send a message on WebSocket
-    function sendWsMessage(message) {
-        if (webSocket.readyState != WebSocket.OPEN) {
-            logOutput("WebSocket is not connected: " + webSocket.readyState);
-            return;
-        }
-
-        const msgObj = JSON.stringify(message)
-        logOutput(`==> ${msgObj}`);
-
-        webSocket.send(msgObj);
     }
 
     //  Load external javascript file to DOM

@@ -8,12 +8,12 @@ import { WorkflowController } from "./workflow-service/workflow-controller";
 const PORT = 9998;
 const DATA_STREAM_TOPIC = "bot-assist-messages";
 
-// Provision Bot Assistant Server
+// Provision Bot Assistant server
 const startServer = async () => {
     const app = express();
     const Server = http.createServer(app);
 
-    // Attach Server to Websocket
+    // Attach websocket to server
     const wsProxy = new WsProxy();
     wsProxy.init(Server);
 
