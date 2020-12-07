@@ -1,7 +1,7 @@
 import http from "http";
 import express from "express";
 import { WsProxy } from "./proxy-service/ws-proxy";
-import { DataStreams } from "./proxy-service/data-streams";
+import { StreamingController } from "./proxy-service/streaming-controller";
 import { StateMachine, loadStateMachine } from "./workflow-service/state-machine";
 import { WorkflowController } from "./workflow-service/workflow-controller";
 
@@ -24,9 +24,9 @@ const startServer = async () => {
         );
     });
 
-    // Initialize data streaming
-    const dataStreams = new DataStreams();
-    await dataStreams.init(DATA_STREAM_TOPIC, wsProxy);
+    // Initialize streaming controller
+    const streamingController = new StreamingController();
+    await streamingController.init(DATA_STREAM_TOPIC, wsProxy);
 
     // Initialize workflow service
     let filePath = getFileName();

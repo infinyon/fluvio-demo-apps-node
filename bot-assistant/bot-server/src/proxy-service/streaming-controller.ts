@@ -4,7 +4,7 @@ import { Message, SID, buildInitMessage, buildResponse, isRequest } from "../mes
 
 type Messages = Array<Message>;
 
-export class DataStreams {
+export class StreamingController {
     private _dataStreams: Map<SID, Messages>;
     private _fluvio: FluvioLib;
     private _wsProxy: WsProxy;
