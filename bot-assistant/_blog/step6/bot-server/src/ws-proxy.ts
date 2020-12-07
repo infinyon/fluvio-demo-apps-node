@@ -1,8 +1,8 @@
-import { EventEmitter } from "events";
 import WS from "ws";
 import http from "http";
 import crypto from 'crypto';
-import { SID } from '../messages';
+import { SID } from './messages';
+import { EventEmitter } from "events";
 
 const COOKIE_NAME = "Fluvio-Bot-Assistant"
 
@@ -44,7 +44,6 @@ export class WsProxy {
 
                 headers.push("Set-Cookie: " + COOKIE_NAME + "=" + session);
             }
-
         });
 
         WsProxy._wss.on("connection", function (ws, req) {
@@ -58,6 +57,7 @@ export class WsProxy {
 
             ws.on("close", function () {
                 console.log(`session closed - ${session}`);
+
                 WsProxy._sessions.delete(session);
             });
 
@@ -66,10 +66,10 @@ export class WsProxy {
 
                 wsProxyEvents.emit(wsProxyEvents.MESSAGE, session, clientMsg);
             });
-
         });
     }
 
+    // Send message to client
     public sendMessage(session: string, clientMsg: string) {
         const ws = WsProxy._sessions.get(session);
         if (!ws) {

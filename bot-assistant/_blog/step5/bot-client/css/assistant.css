@@ -79,7 +79,7 @@ body {
 
 .assistant .inner-body{
 	min-height: 250px;
-	max-height: calc(100vh - 120px);
+	max-height: calc(100vh - 300px);
 	overflow: auto;
 	overflow-x: hidden;
 }

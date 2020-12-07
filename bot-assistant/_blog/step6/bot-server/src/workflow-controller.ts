@@ -4,38 +4,47 @@ import {
     ChoiceResponse,
     UserText,
     buildRequest,
-    isRequest
-} from "../messages";
+} from "./messages";
 import { StateMachine, State } from "./state-machine";
-import { FluvioLib, fluvioEvents } from "./fluvio-lib";
+import { WsProxy, wsProxyEvents } from "./ws-proxy";
 
 export class WorkflowController {
     private static _stateMachine: StateMachine;
     private static _initState: string;
-    private _fluvio: FluvioLib;
+    private _wsProxy: WsProxy;
 
-    constructor() {
-        this._fluvio = new FluvioLib();
-    }
+    init(stateMachine: StateMachine, wsProxy: WsProxy) {
+        this._wsProxy = wsProxy;
 
-    async init(topicName: string, stateMachine: StateMachine) {
         this.listenForEvents();
-
-        await this._fluvio.init(topicName);
-        await this._fluvio.startConsumerStream();
 
         WorkflowController._stateMachine = stateMachine;
         WorkflowController._initState = stateMachine.keys().next().value;
     }
 
-    async processNewConnection(sid: SID) {
+    processNewConnection(sid: SID) {
         const nextStates = this.getInit();
-        await this.sendMessages(sid, nextStates);
+
+        nextStates.forEach(state => {
+            if (state.sendRequest) {
+                const request = buildRequest(sid, state.sendRequest);
+                const message = JSON.stringify(request.payload?.message);
+                this._wsProxy.sendMessage(sid, message);
+            }
+        })
     }
 
-    async processClientMessage(sid: SID, response: ResponseMessage) {
-        const nextStates = this.getNext(response);
-        await this.sendMessages(sid, nextStates);
+    processClientMessage(sid: SID, clientMsg: string) {
+        const message: ResponseMessage = JSON.parse(clientMsg);
+
+        const nextStates = this.getNext(message);
+        nextStates.forEach(state => {
+            if (state.sendRequest) {
+                const request = buildRequest(sid, state.sendRequest);
+                const message = JSON.stringify(request.payload?.message);
+                this._wsProxy.sendMessage(sid, message);
+            }
+        });
     }
 
     private getInit() {
@@ -103,30 +112,18 @@ export class WorkflowController {
         return WorkflowController._initState;
     }
 
-    private async sendMessages(sid: SID, nextStates: State[]) {
-        for (let idx = 0; idx < nextStates.length; idx++) {
-            const state = nextStates[idx];
-            if (state.sendRequest) {
-                const message = buildRequest(sid, state.sendRequest);
-                await this._fluvio.produceMessage(JSON.stringify(message));
-            }
-        }
-    }
-
     private listenForEvents() {
-        fluvioEvents.on(
-            fluvioEvents.FLUVIO_MESSAGE,
-            async (msgObj: string) => {
-                const message = JSON.parse(msgObj);
-                if (!isRequest(message.payload)) {
-                    const sid = message.sid;
+        wsProxyEvents.on(
+            wsProxyEvents.CONNECTION,
+            (sid: SID) => {
+                this.processNewConnection(sid);
+            }
+        );
 
-                    if (message.payload) {
-                        await this.processClientMessage(sid, message.payload.message);
-                    } else {
-                        await this.processNewConnection(sid);
-                    }
-                }
+        wsProxyEvents.on(
+            wsProxyEvents.MESSAGE,
+            async (sid: SID, clientMsg: string) => {
+                this.processClientMessage(sid, clientMsg);
             }
         );
     }

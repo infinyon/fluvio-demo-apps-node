@@ -1,0 +1,115 @@
+{
+    "greetings": {
+        "sendRequest": {
+            "kind": "BotText",
+            "content": "Hi, I'm Bot! Nice to meet you."
+        },
+        "next": "langChoices"
+    },
+    "langChoices": {
+        "sendRequest": {
+            "kind": "ChoiceRequest",
+            "groupId": "lang",
+            "question": "What programming language do you use in your hobby projects?",
+            "choices": [
+                {
+                    "itemId": "rust",
+                    "content": "Rust"
+                },
+                {
+                    "itemId": "go",
+                    "content": "Go"
+                },
+                {
+                    "itemId": "other",
+                    "content": "Other"
+                }
+            ]
+        }
+    },
+    "langChoiceRust": {
+        "matchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "lang",
+            "itemId": "rust"
+        },
+        "next": "anyOtherChoices"
+    },
+    "langChoiceGo": {
+        "matchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "lang",
+            "itemId": "go"
+        },
+        "next": "anyOtherChoices"
+    },
+    "langChoiceOther": {
+        "matchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "lang",
+            "itemId": "other"
+        },
+        "next": "startLangPrefSession"
+    },
+    "startLangPrefSession": {
+        "sendRequest": {
+            "kind": "StartChatSession",
+            "sessionId": "langPreference",
+            "chatPrompt": "Type your preferred language here...",
+            "chatText": "I enabled chat editor"
+        }
+    },
+    "getLangPrefResponse": {
+        "matchResponse": {
+            "kind": "UserText",
+            "sessionId": "langPreference"
+        },
+        "next": "endLangPrefSession"
+    },
+    "endLangPrefSession": {
+        "sendRequest": {
+            "kind": "EndChatSession",
+            "sessionId": "langPreference"
+        },
+        "next": "anyOtherChoices"
+    },
+    "anyOtherChoices": {
+        "sendRequest": {
+            "kind": "ChoiceRequest",
+            "groupId": "others",
+            "question": "Any other?",
+            "choices": [
+                {
+                    "itemId": "yes",
+                    "content": "Yes"
+                },
+                {
+                    "itemId": "no",
+                    "content": "No"
+                }
+            ]
+        }
+    },
+    "anyOtherYes": {
+        "matchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "others",
+            "itemId": "yes"
+        },
+        "next": "langChoices"
+    },
+    "anyOtherNo": {
+        "matchResponse": {
+            "kind": "ChoiceResponse",
+            "groupId": "others",
+            "itemId": "no"
+        },
+        "next": "done"
+    },
+    "done": {
+        "sendRequest": {
+            "kind": "BotText",
+            "content": "Great, thanks!"
+        }
+    }
+}

@@ -5,9 +5,7 @@
 	right:25px;
 }
 
-/* 
- * Assistant - Button 
- */
+/* Assistant - Button */
 
  .assistant button {
 	width: 45px;
@@ -30,9 +28,7 @@
     outline: none;
 }
 
-/* 
- * Assistant - Chat Box
- */
+/* Assistant - Chat Box */
 
 .assistant .chat{
 	display: none;
