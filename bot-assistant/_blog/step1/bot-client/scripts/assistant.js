@@ -17,7 +17,7 @@ window.onload = () => {
             userMsg = createElement("div", {
                 "id": "user-msg",
                 "class": "textareaElement",
-                "placeholder": "Type here",
+                "placeholder": "Choose an option",
                 "contenteditable": "false"
             }),
             footer = createElement("div", { "class": "footer" }, userMsg),

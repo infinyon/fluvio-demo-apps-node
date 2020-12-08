@@ -1,9 +1,9 @@
 import http from "http";
 import express from "express";
 import { WsProxy } from "./proxy-service/ws-proxy";
-import { StreamingController } from "./proxy-service/streaming-controller";
 import { StateMachine, loadStateMachine } from "./workflow-service/state-machine";
 import { WorkflowController } from "./workflow-service/workflow-controller";
+import { StreamingController } from "./proxy-service/streaming-controller";
 
 const PORT = 9998;
 const DATA_STREAM_TOPIC = "bot-assist-messages";

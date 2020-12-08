@@ -47,7 +47,7 @@ window.onload = () => {
             userMsg = createElement("div", {
                 "id": "user-msg",
                 "class": "textareaElement",
-                "placeholder": "Type here",
+                "placeholder": "Choose an option",
                 "contenteditable": "false"
             }),
             footer = createElement("div", { "class": "footer" }, userMsg),
@@ -272,7 +272,7 @@ window.onload = () => {
         chatBox.addEventListener("keydown", {}, false);
 
         chatBox.setAttribute("contenteditable", false);
-        chatBox.setAttribute("placeholder", "Choose an Option");
+        chatBox.setAttribute("placeholder", "Choose an option");
     }
 
     // Scroll to last messages

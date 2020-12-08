@@ -163,7 +163,7 @@
 .assistant .button {
 	width: max-content;
 	border-radius:15px;
-	padding: 10px;
+	padding: 10px 15px;
 	transition-duration: 0.2s;
 	background-color: white;
 	color: #006687;
