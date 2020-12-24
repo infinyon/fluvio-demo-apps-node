@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps } from 'react-router-dom';
-import { getSiteToken } from './SiteCookies';
+import { getLocalStorage } from '../middleware/LocalStorage';
 
 interface Props {
     Component: any,
@@ -9,7 +9,7 @@ interface Props {
 };
 
 const AuthRoute = ({ Component, path, exact = false }: Props) => {
-    const isAuthenticated = getSiteToken();
+    const isAuthenticated = getLocalStorage();
 
     return (
         <Route

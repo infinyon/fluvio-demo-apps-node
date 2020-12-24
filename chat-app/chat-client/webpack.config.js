@@ -53,6 +53,10 @@ module.exports = (env, argv) => {
       watchContentBase: true,
       historyApiFallback: true,
       port: 5051,
+      proxy: {
+        '/api': 'http://localhost:5050',
+        '/ws': 'ws://localhost:5050'
+      }
     };
     config.output = {
       publicPath: "/",

@@ -14,7 +14,7 @@ export const mainTheme = createMuiTheme({
       main: "#8bf7ff",
     },
     background: {
-      default: "white",
+      default: "#26333f",
     },
   },
   overrides: {

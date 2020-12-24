@@ -5,11 +5,10 @@ import {
     Switch,
 } from 'react-router-dom';
 import AuthRoute from './middleware/AuthRoute';
-import Login from './login/Login';
-import Logout from './login/Logout';
-import Unregister from './login/Unregister';
-import RegisterUser from './login/RegisterUser';
-import ResetPass from './login/ResetPass';
+import Login from './auth/Login';
+import Logout from './auth/Logout';
+import Unregister from './auth/Unregister';
+import Register from './auth/Register';
 import { MuiThemeProvider } from '@material-ui/core';
 import { mainTheme } from '../styles/MainTheme';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -50,14 +49,9 @@ export default function MainApp() {
                         component={Login}
                     />
                     <Route
-                        path={'/registerUser'}
+                        path={'/register'}
                         exact={true}
-                        component={RegisterUser}
-                    />
-                    <Route
-                        path={'/resetPassword'}
-                        exact={true}
-                        component={ResetPass}
+                        component={Register}
                     />
                 </Switch>
             </MuiThemeProvider>

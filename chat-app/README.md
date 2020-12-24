@@ -6,7 +6,7 @@ This project provides an example of using `@fluvio/client` to write a chat appli
 
 This demo consists of a WebSocket proxy server relaying messages from a React client web application to the `@fluvio/client`, sending `user` and `chat` topic events to the Fluvio cluster.
 
-`@fluvio/client` is currently not supported in the browser, therefore the WebSocket server is required to proxy the client events. An example of this proxy service can be viewed at [`./chat-server/src/fluvio-lib/dataStream/index.ts`](https://github.com/infinyon/fluvio-demo-apps-node/blob/master/chat-app/chat-server/src/fluvio-lib/dataStreams/index.ts#L26).
+`@fluvio/client` is currently not supported in the browser, therefore the WebSocket server is required to proxy the client events. An example of this proxy service can be viewed at [`./chat-server/src/proxy-in.tss`](https://github.com/infinyon/fluvio-demo-apps-node/blob/master/chat-app/chat-server/src/proxy-in.ts).
 
 Read the [API docs](https://infinyon.github.io/fluvio-client-node/) for more information.
 <hr/>
@@ -14,7 +14,13 @@ Read the [API docs](https://infinyon.github.io/fluvio-client-node/) for more inf
 
 ## Building the Demo App
 
-From the `chat-app` directory, run `npm run build`. This will run the `./build.sh` script, which will install the build dependencies and build the client and server applications.
+From the `./chat-app` directory, run: 
+
+```bash
+npm run build
+``` 
+
+This will run the `./build.sh` script, which will install the build dependencies and build the client and server applications.
 <hr/>
 <br/>
 
@@ -24,13 +30,19 @@ From the `chat-app` directory, run `npm run build`. This will run the `./build.s
 
 ### **Run the Server**
 
-Open a new terminal window, navigate to the `chat-server` directory and start the application:
+Open a new terminal window, navigate to the `./chat-app/chat-server` directory and run the setup script:
+
+```bash
+cd chat-server && npm run setup
+```
+
+The script will provision `fluvio` topics. 
+
+Next, start server
 
 ```bash
 cd chat-server && npm run start
 ```
-
-On a freshly installed cluster with no prior events, you should see the following message if the server successfully started.
 
 
 ```bash

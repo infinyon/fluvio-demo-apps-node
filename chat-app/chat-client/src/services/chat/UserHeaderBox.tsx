@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { mainColor, otherColor } from '../config/Constants';
-import { getUserName } from '../middleware/SiteCookies';
+import { getLocalStorage } from '../middleware/LocalStorage';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function HeaderUser() {
     const classes = useStyles();
-    const userName = getUserName();
+    const userParams = JSON.parse(getLocalStorage());
 
     return (
         <div className={classes.section}>
@@ -38,7 +38,7 @@ export default function HeaderUser() {
                 @
             </Box>
             <Box component="div" display="inline" className={classes.text}>
-                {userName}
+                {userParams.user}
             </Box>
         </div >
     );

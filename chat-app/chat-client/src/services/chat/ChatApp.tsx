@@ -15,8 +15,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ChatViewWrapper from './ChatViewWrapper';
 import UserHeaderBox from './UserHeaderBox';
-import UsersView from './UsersView';
-import { UserContextProvider } from './context/UserContext';
+import UsersView from './UserView';
+import { ChatContextProvider } from '../context/ChatContext';
 
 import {
     toolbarHeight,
@@ -204,13 +204,13 @@ export default function ChatApp(props: RouteComponentProps) {
     );
 
     return (
-        <UserContextProvider>
+        <ChatContextProvider>
             <div className={classes.root}>
                 {renderAppBar}
                 {renderUserMenu}
                 {renderDrawer}
                 {renderContent}
             </div >
-        </UserContextProvider>
+        </ChatContextProvider>
     );
 }

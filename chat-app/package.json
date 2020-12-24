@@ -1,13 +1,11 @@
 {
-  "name": "simple-chat",
-  "version": "1.0.0",
-  "description": "A chat app to demo fluvio distributed data streaming platform",
+  "name": "chat-app",
+  "version": "1.1.0",
+  "description": "A simple chat app to demo fluvio distributed data streaming platform",
   "scripts": {
     "server:dev": "npm run start:dev --prefix chat-server",
     "client:dev": "npm run start:dev --prefix chat-client",
-    "build": "sh ./build.sh",
-    "cypress": "npx cypress open -C ./cypress.json",
-    "test": "npx testyts"
+    "build": "sh ./build.sh"
   },
   "author": "fluvio <admin@fluvio.io> (fluvio.io)",
   "license": "Apache-2.0",
@@ -17,12 +15,7 @@
     "chat-server": "file:chat-server"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.14",
-    "@types/mocha": "^8.0.3",
     "@types/node": "^14.11.5",
-    "cypress": "^5.3.0",
-    "faker": "^5.1.0",
-    "testyts": "^1.0.3",
     "typescript": "^4.0.3"
   }
 }

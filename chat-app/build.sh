@@ -1,4 +1,3 @@
-
 # Install Chat Client Dependencies
 # Build dist/ files
 pushd chat-client
@@ -9,6 +8,3 @@ popd
 pushd chat-server
 npm install
 popd
-
-# Install Cypress Test Dependencies
-npm install

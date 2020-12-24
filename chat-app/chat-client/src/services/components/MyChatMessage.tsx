@@ -2,16 +2,21 @@ import * as React from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import MyAvatar from './MyAvatar';
 import Box from '@material-ui/core/Box';
-import { Message } from '../chat/ChatView';
-import { formatDate, dateRangeSec } from '../config/Utils';
+import { ChatMessage } from '../models/Messages';
+import { formatDate, dateRangeSec } from '../config/DateTime';
 
 const GROUP_MESSAGE_WITHIN_SECONDS = 5;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        chatBox: {
+            fontFamily: "Whitney,Helvetica Neue,Helvetica,Arial,sans-serif",
+        },
         section: {
             marginTop: 5,
-            fontFamily: "Whitney,Helvetica Neue,Helvetica,Arial,sans-serif",
+        },
+        sectionSameUser: {
+            marginTop: 0,
         },
         avatarHeader: {
             paddingTop: 3,
@@ -36,31 +41,32 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    prevMessage?: Message,
-    message: Message,
+    prevMessage?: ChatMessage,
+    message: ChatMessage,
+    colorCode: string,
 }
 
 export default function MyChatMessage(props: Props) {
     const classes = useStyles();
-    const { prevMessage, message } = props;
+    const { prevMessage, message, colorCode } = props;
     const date = formatDate(message.timestamp);
 
     const sameUser = () => {
         return (
             prevMessage &&
-            prevMessage.name == message.name &&
+            prevMessage.user == message.user &&
             dateRangeSec(prevMessage.timestamp, message.timestamp) < GROUP_MESSAGE_WITHIN_SECONDS
         );
     }
 
     return (
-        <div>
+        <div className={classes.chatBox}>
             {!sameUser() &&
                 <Box display="flex" flexDirection="row" className={classes.section}>
-                    <MyAvatar name={message.name} colorCode={message.colorCode} />
+                    <MyAvatar name={message.user} colorCode={colorCode} />
                     <Box display="flex" flexDirection="column">
                         <div className={classes.avatarHeader} >
-                            <span className={classes.name}>{message.name}</span>
+                            <span className={classes.name}>{message.user}</span>
                             <span className={classes.date}>{date}</span>
                         </div>
                         <div className={classes.text}>
@@ -70,7 +76,7 @@ export default function MyChatMessage(props: Props) {
                 </Box >
             }
             {sameUser() &&
-                <Box display="flex" flexDirection="row" className={classes.section}>
+                <Box display="flex" flexDirection="row" className={classes.sectionSameUser}>
                     <div className={classes.lineGaps}>
                         <div className={classes.text}>
                             {message.message}

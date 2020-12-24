@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "npx serve ./dist -l 5051 -s",
+    "build": "npx webpack --mode production",
     "start:dev": "npx webpack-dev-server --mode development --open --hot",
-    "build:dev": "npx webpack --mode development",
-    "build": "npx webpack --mode production"
+    "build:dev": "npx webpack --mode development"
   },
   "keywords": [],
   "author": "fluvio <admin@fluvio.io> (fluvio.io)",
@@ -27,7 +27,8 @@
     "typescript": "^3.7.4",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "express": "^4.17.1"
   },
   "dependencies": {
     "@material-ui/core": "^4.8.3",

@@ -1,5 +1,0 @@
-#!/bin/sh
-curl -s -X POST \
-    -H "Content-Type:application/json" \
-    http://localhost:5050/api/v1/register \
-    -d "{\"name\":\"$1\", \"password\":\"$2\"}"

@@ -7,7 +7,7 @@ import Card from '@material-ui/core/Card';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         grid: {
-            minHeight: 'calc(100vh - 56px)',
+            //minHeight: 'calc(100vh - 56px)',
             [theme.breakpoints.down('xs')]: {
                 alignItems: 'flex-start',
                 paddingTop: theme.spacing(5),
