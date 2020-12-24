@@ -1,5 +1,6 @@
 import {
     SID,
+    Message,
     ResponseMessage,
     ChoiceResponse,
     UserText,
@@ -7,39 +8,45 @@ import {
     isRequest
 } from "../messages";
 import { StateMachine, State } from "./state-machine";
-import { FluvioLib, fluvioEvents } from "./fluvio-lib";
+import { FromEnd } from "../fluvio-util";
+import { TopicProducer, PartitionConsumer } from "@fluvio/client";
 
 export class WorkflowController {
-    private static _stateMachine: StateMachine;
-    private static _initState: string;
-    private _fluvio: FluvioLib;
+    private stateMachine: StateMachine;
+    private initState: string;
+    private fluvioProducer: TopicProducer;
+    private fluvioConsumer: PartitionConsumer;
 
-    constructor() {
-        this._fluvio = new FluvioLib();
+    constructor(
+        stateMachine: StateMachine,
+        fluvioProducer: TopicProducer,
+        fluvioConsumer: PartitionConsumer
+    ) {
+        this.stateMachine = stateMachine;
+        this.initState = stateMachine.keys().next().value;
+
+        this.fluvioProducer = fluvioProducer;
+        this.fluvioConsumer = fluvioConsumer;
     }
 
-    async init(topicName: string, stateMachine: StateMachine) {
-        this.listenForEvents();
-
-        await this._fluvio.init(topicName);
-        await this._fluvio.startConsumerStream();
-
-        WorkflowController._stateMachine = stateMachine;
-        WorkflowController._initState = stateMachine.keys().next().value;
+    public async init() {
+        this.fluvioConsumer.stream(FromEnd, async (sessionMsg: string) => {
+            await this.processFluvioMessage(sessionMsg);
+        });
     }
 
-    async processNewConnection(sid: SID) {
+    private async processNewConnection(sid: SID) {
         const nextStates = this.getInit();
         await this.sendMessages(sid, nextStates);
     }
 
-    async processClientMessage(sid: SID, response: ResponseMessage) {
+    private async processClientMessage(sid: SID, response: ResponseMessage) {
         const nextStates = this.getNext(response);
         await this.sendMessages(sid, nextStates);
     }
 
     private getInit() {
-        return this.processNext(WorkflowController._initState);
+        return this.processNext(this.initState);
     }
 
     private getNext(response: ResponseMessage) {
@@ -62,12 +69,12 @@ export class WorkflowController {
     private processNext(startState: string) {
         var nextStates: State[] = [];
 
-        var state = WorkflowController._stateMachine.get(startState);
+        var state = this.stateMachine.get(startState);
         while (state) {
             nextStates.push(state);
 
             const next = state.next || "";
-            state = WorkflowController._stateMachine.get(next);
+            state = this.stateMachine.get(next);
             if (next.length > 0 && !state) {
                 console.error(`Error: Cannot find next state: ${next}`);
             }
@@ -77,7 +84,7 @@ export class WorkflowController {
     }
 
     private getChoiceResponseState(choiceResponse: ChoiceResponse) {
-        for (let [key, state] of WorkflowController._stateMachine.entries()) {
+        for (let [key, state] of this.stateMachine.entries()) {
             if (state.matchResponse &&
                 state.matchResponse.kind == choiceResponse.kind &&
                 state.matchResponse.groupId == choiceResponse.groupId &&
@@ -87,11 +94,11 @@ export class WorkflowController {
         }
 
         console.error(`Error: cannot find choice ${JSON.stringify(choiceResponse)}`);
-        return WorkflowController._initState;
+        return this.initState;
     }
 
     private getUserTextState(userText: UserText) {
-        for (let [key, state] of WorkflowController._stateMachine.entries()) {
+        for (let [key, state] of this.stateMachine.entries()) {
             if (state.matchResponse &&
                 state.matchResponse.kind == "UserText" &&
                 state.matchResponse.sessionId == userText.sessionId) {
@@ -100,7 +107,7 @@ export class WorkflowController {
         }
 
         console.error(`Error: cannot find user session ${JSON.stringify(userText)}`);
-        return WorkflowController._initState;
+        return this.initState;
     }
 
     private async sendMessages(sid: SID, nextStates: State[]) {
@@ -108,26 +115,23 @@ export class WorkflowController {
             const state = nextStates[idx];
             if (state.sendRequest) {
                 const message = buildRequest(sid, state.sendRequest);
-                await this._fluvio.produceMessage(JSON.stringify(message));
+                await this.fluvioProducer.sendRecord(JSON.stringify(message), 0);
             }
         }
     }
 
-    private listenForEvents() {
-        fluvioEvents.on(
-            fluvioEvents.FLUVIO_MESSAGE,
-            async (msgObj: string) => {
-                const message = JSON.parse(msgObj);
-                if (!isRequest(message.payload)) {
-                    const sid = message.sid;
-
-                    if (message.payload) {
-                        await this.processClientMessage(sid, message.payload.message);
-                    } else {
-                        await this.processNewConnection(sid);
-                    }
-                }
+    private async processFluvioMessage(fluvioMsg: string) {
+        const message: Message = JSON.parse(fluvioMsg);
+        if (!isRequest(message.payload)) {
+            const sid = message.sid;
+            if (message.payload) {
+                await this.processClientMessage(
+                    sid,
+                    <ResponseMessage>message.payload.message
+                );
+            } else {
+                await this.processNewConnection(sid);
             }
-        );
+        }
     }
 }

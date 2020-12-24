@@ -9,7 +9,13 @@ The server uses Fluvio data streaming for storage and message exchanges. If you 
 
 ## Building Bot Assistant
 
-From `bot-assistant` directory, run build command:
+From `bot-assistant` directory, setup environment (create fluvio topic):
+
+```bash
+npm run setup
+```
+
+Then, build the project:
 
 ```bash
 npm run build
@@ -24,20 +30,15 @@ Open a new terminal window, navigate to `bot-assistant` directory and start the 
 ```bash
 PARAMS=state-machine.json npm run start:server
 ```
-The server connects to Fluvio creates a topic and listens for client messages. If if the server successfully started, you should see the following message.
+The server connects to Fluvio creates a topic and listens for client messages. If if the server successfully started, you should see the following message:
 
 ```bash
-started bot assistant server at http://localhost:9998...
-topic: 'bot-assist-messages' created
-after topic add
-proxy: fetched 0 messages
-after fetch
-proxy: listening for events ... 
+...
 ┌───────────────────┬─────┬────────┐
 │ (iteration index) │ Key │ Values │
 ├───────────────────┼─────┼────────┤
 └───────────────────┴─────┴────────┘
-workflow: listening for events ... 
+started bot assistant server at http://localhost:9998...
 ```
 
 ### Run Bot Client
@@ -46,6 +47,11 @@ Open a new terminal window, navigate to `bot-assistant` directory and start the 
 
 ```bash
 npm run start:client
+```
+
+You should see the following message:
+
+```bash
 ...
 listening http://localhost:9999
 ```

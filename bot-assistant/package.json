@@ -5,6 +5,8 @@
   "scripts": {
     "start:server": "npm run start:server --prefix bot-server",
     "start:client": "npm run start:client --prefix bot-client",
+    "setup": "npm run setup --prefix bot-server",
+    "cleanup": "npm run cleanup --prefix bot-server",
     "build": "sh ./build.sh"
   },
   "author": "fluvio <admin@fluvio.io> (fluvio.io)",

@@ -4,7 +4,9 @@
   "description": "Robot assistant server implementation",
   "main": "bot-server.js",
   "scripts": {
-    "start:server": "tsc-watch --onSuccess \"node ./dist/bot-server.js $PARAMS\""
+    "start:server": "tsc-watch --onSuccess \"node ./dist/bot-server.js $PARAMS\"",
+    "setup": "sh ./setup.sh",
+    "cleanup": "sh ./cleanup.sh"
   },
   "author": "fluvio <admin@fluvio.io> (fluvio.io)",
   "license": "Apache 2.0",
