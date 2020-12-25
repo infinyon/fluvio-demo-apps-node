@@ -25,7 +25,7 @@ This will run the `./build.sh` script, which will install the dependencies and b
 
 ### Run Bot Server
 
-Open a new terminal window, navigate to `bot-assistant` directory and start the server:
+Open a new terminal window, navigate to `./bot-assistant/bot-server` directory and start the server:
 
 ```bash
 PARAMS=state-machine.json npm run start:server

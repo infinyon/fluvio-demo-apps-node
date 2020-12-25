@@ -161,7 +161,7 @@ export class UserController {
 
     private sendAllUsers(sid: SID) {
         const usersMessage = buildWsAllUsers(Array.from(this.users.values()));
-        this.proxyOut.sendMessage(JSON.stringify(usersMessage), sid);
+        this.proxyOut.sendMessage(sid, JSON.stringify(usersMessage));
     }
 
     private show() {

@@ -24,15 +24,13 @@ export class WsProxyOut {
         this.sessions.delete(sid);
     }
 
-    public broadcastMessage(message: string, sid?: SID) {
-        for (let [session, ws] of this.sessions) {
-            if (!sid || sid !== session) {
-                ws.send(message);
-            }
+    public broadcastMessage(message: string) {
+        for (let ws of this.sessions.values()) {
+            ws.send(message);
         }
     }
 
-    public sendMessage(message: string, sid: SID) {
+    public sendMessage(sid: SID, message: string) {
         const ws = this.sessions.get(sid);
         if (ws) {
             ws.send(message);

@@ -47,9 +47,7 @@ cd chat-server && npm run start
 The script should display the following messages:
 
 ```bash
-> chat-server@1.0.0 start /Users/ryantate/Projects/InfinyOn/fluvio-demo-apps-node/chat-app/chat-server
-> npx ts-node ./src/chat-server.ts
-> chat-server@1.0.0 start /Users/aj/projects/github/fluvio-demo-apps-node/chat-app/chat-server
+> chat-server@1.0.0 start /projects/github/fluvio-demo-apps-node/chat-app/chat-server
 > npx ts-node ./src/chat-server.ts
 
 requiring platform specific module
@@ -72,7 +70,7 @@ Chat server is running at http://localhost:5050...
 
 ### **Run the Client**
 
-Open a new terminal window, navigate to the `chat-client` directory and start the application:
+Open a new terminal window, navigate to the `./chat-app/chat-client` directory and start the application:
 
 ```bash
 cd chat-client && npm run start
@@ -106,6 +104,4 @@ npx: installed 78 in 3.108s
 <hr/>
 <br/>
 
-## Automated Testing of the Demo App
-
-Once the demo applications are running, you can launch the automated cypress e2e test using `npm run test`.
+Open the website and create an account.

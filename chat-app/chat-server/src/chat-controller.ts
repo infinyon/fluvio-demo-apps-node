@@ -66,7 +66,7 @@ export class ChatController {
         const messages = Array.from(this.chatMessages.values());
         if (messages.length > 0) {
             const wsChatMessages = buildWsChatMessages(messages);
-            this.proxyOut.sendMessage(JSON.stringify(wsChatMessages), sid);
+            this.proxyOut.sendMessage(sid, JSON.stringify(wsChatMessages));
         }
     }
 

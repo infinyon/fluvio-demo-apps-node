@@ -137,21 +137,21 @@ export class SessionController {
 
     private async NotifyUserOnline(user: UserName, sid: SID) {
         const sessionMessage = buildUserOnline(user);
-        this.proxyOut.broadcastMessage(JSON.stringify(sessionMessage), sid);
+        this.proxyOut.broadcastMessage(JSON.stringify(sessionMessage));
 
         await this.sessionProducer.sendRecord(JSON.stringify(sessionMessage), 0);
     }
 
     private async NotifyUserOffline(user: UserName, sid: SID) {
         const sessionMessage = buildUserOffline(user);
-        this.proxyOut.broadcastMessage(JSON.stringify(sessionMessage), sid);
+        this.proxyOut.broadcastMessage(JSON.stringify(sessionMessage));
 
         await this.sessionProducer.sendRecord(JSON.stringify(sessionMessage), 0);
     }
 
     private sendOnlineUsers(sid: SID) {
         const sessionMessage = buildWsOnlineUsers(this.sessions.getUsers());
-        this.proxyOut.sendMessage(JSON.stringify(sessionMessage), sid);
+        this.proxyOut.sendMessage(sid, JSON.stringify(sessionMessage));
     }
 
     private async NotifySessionStarted(user: UserName, sid: SID) {
