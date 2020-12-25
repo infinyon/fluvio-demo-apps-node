@@ -44,21 +44,27 @@ Next, start server
 cd chat-server && npm run start
 ```
 
+The script should display the following messages:
 
 ```bash
 > chat-server@1.0.0 start /Users/ryantate/Projects/InfinyOn/fluvio-demo-apps-node/chat-app/chat-server
 > npx ts-node ./src/chat-server.ts
+> chat-server@1.0.0 start /Users/aj/projects/github/fluvio-demo-apps-node/chat-app/chat-server
+> npx ts-node ./src/chat-server.ts
 
 requiring platform specific module
-init users ...
-Topic 'nsc-user-events' created
-Topic 'nsc-chat-events' created
+Users
 ┌─────────┐
 │ (index) │
 ├─────────┤
 └─────────┘
-Loaded (0) chat messages
-...init done
+ChatMessages
+┌──────────┬────────┐
+│ (index)  │ Values │
+├──────────┼────────┤
+│ messages │   0    │
+└──────────┴────────┘
+----
 Chat server is running at http://localhost:5050...
 ```
 
