@@ -43,7 +43,7 @@ started bot assistant server at http://localhost:9998...
 
 ### Run Bot Client
 
-Open a new terminal window, navigate to `bot-assistant` directory and start the client:
+Open a new terminal window, navigate to `./bot-assistant/bot-client` directory and start the client:
 
 ```bash
 npm run start:client
