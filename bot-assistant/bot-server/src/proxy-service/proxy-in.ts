@@ -6,12 +6,12 @@ import { SessionController } from "./session-controller";
 const COOKIE_NAME = "Fluvio-Bot-Assistant"
 
 export class WsProxyIn {
-    private static _wss: WS.Server;
-    private static _sessionController: SessionController;
+    private static wss: WS.Server;
+    private static sessionController: SessionController;
 
     constructor(sessionController: SessionController) {
-        WsProxyIn._wss = new WS.Server({ clientTracking: false, noServer: true });
-        WsProxyIn._sessionController = sessionController;
+        WsProxyIn.wss = new WS.Server({ clientTracking: false, noServer: true });
+        WsProxyIn.sessionController = sessionController;
     }
 
     public init(server: http.Server) {
@@ -26,14 +26,14 @@ export class WsProxyIn {
                 request.headers.session = session;
             }
 
-            WsProxyIn._wss.handleUpgrade(request, socket, head, function (ws: WS) {
-                WsProxyIn._wss.emit("connection", ws, request);
+            WsProxyIn.wss.handleUpgrade(request, socket, head, function (ws: WS) {
+                WsProxyIn.wss.emit("connection", ws, request);
             });
         });
     }
 
     private onConnection() {
-        WsProxyIn._wss.on("headers", (headers: Array<string>, req) => {
+        WsProxyIn.wss.on("headers", (headers: Array<string>, req) => {
             const session = WsProxyIn.parseCookie(COOKIE_NAME, req.headers.cookie);
             if (!session) {
                 let session = crypto.randomBytes(20).toString("hex");
@@ -43,17 +43,17 @@ export class WsProxyIn {
             }
         });
 
-        WsProxyIn._wss.on("connection", async (ws, req) => {
+        WsProxyIn.wss.on("connection", async (ws, req) => {
             const session_hdr = req.headers.session;
             const sid = ((Array.isArray(session_hdr)) ? session_hdr[0] : session_hdr) || "";
-            await WsProxyIn._sessionController.sessionOpened(sid, ws);
+            await WsProxyIn.sessionController.sessionOpened(sid, ws);
 
             ws.on("close", async () => {
-                await WsProxyIn._sessionController.sessionClosed(sid);
+                await WsProxyIn.sessionController.sessionClosed(sid);
             });
 
             ws.on("message", async (clientMsg: string) => {
-                await WsProxyIn._sessionController.sessionMessage(sid, clientMsg);
+                await WsProxyIn.sessionController.sessionMessage(sid, clientMsg);
             });
 
         });
