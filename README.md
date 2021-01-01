@@ -11,20 +11,16 @@ Read the [`getting-started`](https://fluvio.io/docs/getting-started/) guide to a
 ## Demos
 
 ```
+$ tree -L 1
 .
 ├── README.md
 ├── bot-assistant
-└── chat-app
+├── chat-app
+└── websocket-glue
 
-2 directories, 1 file
+3 directories, 1 file
 ```
 
-### Running the Bot Assistant Demo
+### Running the Apps
 
-Navigate to the `bot-assistant` directory and follow instructions in the `README.md` file to get started.
-
-
-### Running the Chat Application Demo
-
-Navigate to the `chat-app` directory and follow instructions in the `README.md` file to get started running the application.
-
+Navigate to the app directory and follow instructions in the `README.md` file to get started.

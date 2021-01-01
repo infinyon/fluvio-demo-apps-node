@@ -4,9 +4,7 @@ This project provides an example of using `@fluvio/client` to write a chat appli
 
 ## Application Overview
 
-This demo consists of a WebSocket proxy server relaying messages from a React client web application to the `@fluvio/client`, sending `user` and `chat` topic events to the Fluvio cluster.
-
-`@fluvio/client` is currently not supported in the browser, therefore the WebSocket server is required to proxy the client events. An example of this proxy service can be viewed at [`./chat-server/src/proxy-in.tss`](https://github.com/infinyon/fluvio-demo-apps-node/blob/master/chat-app/chat-server/src/proxy-in.ts).
+This demo consists of a WebSocket proxy server relaying messages from a React client web application to the `@fluvio/client`, sending `user`, `chat`, and `session` messages to the Fluvio cluster.
 
 Read the [API docs](https://infinyon.github.io/fluvio-client-node/) for more information.
 <hr/>
@@ -14,40 +12,35 @@ Read the [API docs](https://infinyon.github.io/fluvio-client-node/) for more inf
 
 ## Building the Demo App
 
-From the `./chat-app` directory, run: 
+In a terminal window, from `chat-app` directory, run the following command:
 
 ```bash
 npm run build
 ``` 
 
 This will run the `./build.sh` script, which will install the build dependencies and build the client and server applications.
-<hr/>
-<br/>
-
-## Running the Demo App
-
-<br/>
 
 ### **Run the Server**
 
-Open a new terminal window, navigate to the `./chat-app/chat-server` directory and run the setup script:
+In the terminal window, from `chat-app` directory, run the following command:
 
 ```bash
-cd chat-server && npm run setup
+cd chat-server && npm run setup && npm run start
 ```
 
-The script will provision `fluvio` topics. 
+The script `npm run setup` will provision `fluvio` topics. 
 
-Next, start server
-
-```bash
-cd chat-server && npm run start
-```
-
-The script should display the following messages:
+On a freshly installed cluster with no prior events, you should see the following message if the server successfully started.
 
 ```bash
-> chat-server@1.0.0 start /projects/github/fluvio-demo-apps-node/chat-app/chat-server
+> chat-server@1.0.0 setup /Users/aj/projects/github/fluvio-demo-apps-node/chat-app/chat-server
+> sh ./setup.sh
+
+topic "chat-app-users" created
+topic "chat-app-messages" created
+topic "chat-app-sessions" created
+
+> chat-server@1.0.0 start /Users/aj/projects/github/fluvio-demo-apps-node/chat-app/chat-server
 > npx ts-node ./src/chat-server.ts
 
 requiring platform specific module
@@ -66,42 +59,23 @@ ChatMessages
 Chat server is running at http://localhost:5050...
 ```
 
-<br/>
-
 ### **Run the Client**
 
-Open a new terminal window, navigate to the `./chat-app/chat-client` directory and start the application:
+Open a new terminal window, navigate to the `chat-app` directory, and start the application:
 
 ```bash
-cd chat-client && npm run start
+cd chat-client && npm run start:dev
 ```
 
 If everything was installed and built successfully, you should see the following message when starting the application.
 
-Visit the application at [`http://localhost:5051`](http://localhost:5051)
-
-Your network address will be different than the example shown below.
-
 ```bash
-> chat-client@1.0.0 start /Users/ryantate/Projects/InfinyOn/fluvio-demo-apps-node/chat-app/chat-client
-> npx serve ./dist -l 5051 -s
-
-npx: installed 78 in 3.108s
-
-   ┌──────────────────────────────────────────────────┐
-   │                                                  │
-   │   Serving!                                       │
-   │                                                  │
-   │   - Local:            http://localhost:5051      │
-   │   - On Your Network:  http://192.168.0.24:5051   │
-   │                                                  │
-   │   Copied local address to clipboard!             │
-   │                                                  │
-   └──────────────────────────────────────────────────┘
-
-
+...
+Child HtmlWebpackCompiler:
+     1 asset
+    Entrypoint HtmlWebpackPlugin_0 = __child-HtmlWebpackPlugin_0
+    [./node_modules/html-webpack-plugin/lib/loader.js!./public/index.html] 989 bytes {HtmlWebpackPlugin_0} [built]
+ℹ ｢wdm｣: Compiled successfully.
 ```
-<hr/>
-<br/>
 
 Open the website and create an account.

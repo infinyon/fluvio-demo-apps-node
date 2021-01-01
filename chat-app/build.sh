@@ -1,7 +1,7 @@
 # Install Chat Client Dependencies
-# Build dist/ files
 pushd chat-client
-npm install && npm run build
+npm install
+npm run build:dev
 popd
 
 # Install Chat Server Dependencies
