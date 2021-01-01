@@ -15,30 +15,37 @@ Read the [API docs](https://infinyon.github.io/fluvio-client-node/) for more inf
 In a terminal window, from `chat-app` directory, run the following command:
 
 ```bash
-npm run build
+make build
 ``` 
 
-This will run the `./build.sh` script, which will install the build dependencies and build the client and server applications.
+This will install the build dependencies and build the client and server applications.
+
+## Setup 
+
+Run command below to setup fluvio topics necessary for demo:
+```bash
+make setup
+```
+
+On a freshly installed cluster with no prior events, you should see the following message if the server successfully started.
+
+```bash
+> chat-server@1.0.0 setup /Users/aj/projects/github/fluvio-demo-apps-node/chat-app/chat-server
+> make setup
+
+topic "chat-app-users" created
+topic "chat-app-messages" created
+topic "chat-app-sessions" created
+
 
 ### **Run the Server**
 
 In the terminal window, from `chat-app` directory, run the following command:
 
 ```bash
-cd chat-server && npm run setup && npm run start
+make run-server
 ```
 
-The script `npm run setup` will provision `fluvio` topics. 
-
-On a freshly installed cluster with no prior events, you should see the following message if the server successfully started.
-
-```bash
-> chat-server@1.0.0 setup /Users/aj/projects/github/fluvio-demo-apps-node/chat-app/chat-server
-> sh ./setup.sh
-
-topic "chat-app-users" created
-topic "chat-app-messages" created
-topic "chat-app-sessions" created
 
 > chat-server@1.0.0 start /Users/aj/projects/github/fluvio-demo-apps-node/chat-app/chat-server
 > npx ts-node ./src/chat-server.ts
@@ -64,7 +71,7 @@ Chat server is running at http://localhost:5050...
 Open a new terminal window, navigate to the `chat-app` directory, and start the application:
 
 ```bash
-cd chat-client && npm run start:dev
+make run-client
 ```
 
 If everything was installed and built successfully, you should see the following message when starting the application.
