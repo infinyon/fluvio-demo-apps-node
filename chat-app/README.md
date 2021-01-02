@@ -2,6 +2,8 @@
 
 This project provides an example of using `@fluvio/client` to write a chat application using Node.js.
 
+<p align="center"><img src="./chat-client/public/img/chat.svg" alt="Chat App" width="800"/></p>
+
 ## Application Overview
 
 This demo consists of a WebSocket proxy server relaying messages from a React client web application to the `@fluvio/client`, sending `user`, `chat`, and `session` messages to the Fluvio cluster.
