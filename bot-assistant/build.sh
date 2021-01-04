@@ -1,10 +1,6 @@
 # Install Bot Client Dependencies
 # Build dist/ files
-pushd bot-client
-npm install
-popd
+cd bot-client && npm install && cd ..
 
 # Install Bot Server Dependencies
-pushd bot-server
-npm install
-popd
+cd bot-server && npm install && cd ..
