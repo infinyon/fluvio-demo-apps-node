@@ -28,7 +28,7 @@ This will run the `./build.sh` script, which will install the dependencies and b
 Open a new terminal window, navigate to `./bot-assistant/bot-server` directory and start the server:
 
 ```bash
-PARAMS=state-machine.json npm run start:server
+PARAMS=state-machines/fluvio.json npm run start:server
 ```
 The server connects to Fluvio creates a topic and listens for client messages. If if the server successfully started, you should see the following message:
 

@@ -30,7 +30,7 @@ const startServer = async () => {
 // read state machine file from command line
 function getFileName() {
     if (process.argv.length != 3) {
-        console.log("Usage: node bot-server.js <state-machine.json>");
+        console.log("Usage: node bot-assitant.js <state-machine.json>");
         process.exit(1);
     }
     return process.argv[2];

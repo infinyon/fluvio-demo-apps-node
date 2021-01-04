@@ -20,6 +20,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
+    "bot-assistant.ts",
     "src/*",
   ],
 }

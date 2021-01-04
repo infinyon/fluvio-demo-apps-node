@@ -26,7 +26,7 @@ export class SessionController {
 
     public async init() {
         ToRecords(await this.fluvioConsumer.fetch(FromStart)).forEach(sessionMsg => {
-            this.appendMessageToSession(JSON.parse(sessionMsg));
+            this.addMessageToSession(JSON.parse(sessionMsg));
         });
 
         this.show();
@@ -60,8 +60,8 @@ export class SessionController {
     public async sessionMessage(sid: SID, clientMsg: string) {
         console.log(`${sid} <== ${clientMsg}`);
 
-        const message = buildResponse(sid, JSON.parse(clientMsg));
-        await this.fluvioProducer.sendRecord(JSON.stringify(message), 0);
+        const clientResponse = buildResponse(sid, JSON.parse(clientMsg));
+        await this.fluvioProducer.sendRecord(JSON.stringify(clientResponse), 0);
     }
 
     public sendMessagesToClient(messages: Messages) {
@@ -77,7 +77,7 @@ export class SessionController {
         }
     }
 
-    private appendMessageToSession(message: Message) {
+    private addMessageToSession(message: Message) {
         const sid = message.sid;
         var messages = this.sessionMessages.get(sid);
         if (!messages) {
@@ -89,7 +89,7 @@ export class SessionController {
 
     private processFluvioMessage(fluvioMsg: string) {
         const message: Message = JSON.parse(fluvioMsg);
-        this.appendMessageToSession(message);
+        this.addMessageToSession(message);
 
         if (isRequest(message.payload)) {
             this.sendMessageToClient(message);

@@ -1,5 +1,4 @@
-import http from "http";
-import express from "express";
+import { Server } from "http";
 import Fluvio from '@fluvio/client';
 import { WsProxyIn } from "./proxy-service/proxy-in";
 import { WsProxyOut } from "./proxy-service/proxy-out";
@@ -7,15 +6,10 @@ import { StateMachine, loadStateMachine } from "./workflow-service/state-machine
 import { WorkflowController } from "./workflow-service/workflow-controller";
 import { SessionController } from "./proxy-service/session-controller";
 
-const PORT = 9998;
 const BOT_ASSIST_MESSAGES = "bot-assist-messages";
 
-// Exit on exceptions
-process.on("uncaughtException", (e) => { console.log(e); process.exit(1); });
-process.on("unhandledRejection", (e) => { console.log(e); process.exit(1); });
-
 // Provision Bot Assistant server
-const startServer = async () => {
+export const initBotAssistant = async (server: Server) => {
 
     // Fluvio: connect, check topic, and create producer/consumer
     const fluvio = await Fluvio.connect();
@@ -38,16 +32,7 @@ const startServer = async () => {
     await workflowController.init();
 
     // Create server
-    const app = express();
-    const Server = http.createServer(app);
-    wsProxyIn.init(Server);
-
-    // Start server
-    Server.listen(PORT, () => {
-        console.log(
-            `started bot assistant server at http://localhost:${PORT}...`
-        );
-    });
+    wsProxyIn.init(server);
 };
 
 // Ensure topic exits
@@ -62,11 +47,8 @@ const checkTopic = async (fluvio: Fluvio) => {
 // Read state machine file from command line
 const getFileName = () => {
     if (process.argv.length != 3) {
-        console.log("Usage: node bot-server.js <state-machine.json>");
+        console.log("Usage: node bot-assistant.js <state-machine.json>");
         process.exit(1);
     }
     return process.argv[2];
 }
-
-// Start Server
-startServer();
