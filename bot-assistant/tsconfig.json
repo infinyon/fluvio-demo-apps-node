@@ -4,23 +4,15 @@
     "module": "commonjs",
     "lib": [
       "dom",
-      "es2017",
+      "ES2017",
       "ES2015"
     ],
-    "sourceMap": true,
-    "declaration": true,
     "outDir": "dist",
     "strict": true,
-    "noImplicitAny": true,
-    "strictPropertyInitialization": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "bot-assistant.ts",
     "src/*",
   ],
 }

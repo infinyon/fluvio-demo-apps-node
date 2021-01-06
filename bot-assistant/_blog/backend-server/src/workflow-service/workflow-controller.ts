@@ -8,50 +8,35 @@ import {
     isRequest
 } from "../messages";
 import { StateMachine, State } from "./state-machine";
-import { TopicProducer, PartitionConsumer, Offset } from "@fluvio/client";
+import { SessionController } from "../proxy-service/session-controller";
 
 export class WorkflowController {
     private stateMachine: StateMachine;
+    private sessionController: SessionController;
     private initState: string;
-    private fluvioProducer: TopicProducer;
-    private fluvioConsumer: PartitionConsumer;
 
     constructor(
         stateMachine: StateMachine,
-        fluvioProducer: TopicProducer,
-        fluvioConsumer: PartitionConsumer
     ) {
         this.stateMachine = stateMachine;
         this.initState = stateMachine.keys().next().value;
 
-        this.fluvioProducer = fluvioProducer;
-        this.fluvioConsumer = fluvioConsumer;
+        this.sessionController = Object();
     }
 
-    public async init() {
-        this.fluvioConsumer.stream(Offset.FromEnd(), async (sessionMsg: string) => {
-            await this.processFluvioMessage(sessionMsg);
-        });
+    public init(sessionController: SessionController) {
+        this.sessionController = sessionController;
     }
 
-    private async processNewConnection(sid: SID) {
-        const nextStates = this.getInit();
-        await this.sendMessages(sid, nextStates);
+    private processNewConnection(sid: SID) {
+        const nextStates = this.processNext(this.initState);
+        this.sendMessages(sid, nextStates);
     }
 
-    private async processClientMessage(sid: SID, response: ResponseMessage) {
-        const nextStates = this.getNext(response);
-        await this.sendMessages(sid, nextStates);
-    }
-
-    private getInit() {
-        return this.processNext(this.initState);
-    }
-
-    private getNext(response: ResponseMessage) {
-        var state: string = this.getState(response);
-
-        return this.processNext(state);
+    private processNextState(sid: SID, response: ResponseMessage) {
+        const state: string = this.getState(response);
+        const nextStates = this.processNext(state);
+        this.sendMessages(sid, nextStates);
     }
 
     private getState(response: ResponseMessage) {
@@ -109,27 +94,28 @@ export class WorkflowController {
         return this.initState;
     }
 
-    private async sendMessages(sid: SID, nextStates: State[]) {
+    private sendMessages(sid: SID, nextStates: State[]) {
         for (let idx = 0; idx < nextStates.length; idx++) {
             const state = nextStates[idx];
             if (state.sendRequest) {
                 const message = buildRequest(sid, state.sendRequest);
-                await this.fluvioProducer.sendRecord(JSON.stringify(message), 0);
+                this.sessionController.processBotMessage(JSON.stringify(message));
             }
         }
     }
 
-    private async processFluvioMessage(fluvioMsg: string) {
-        const message: Message = JSON.parse(fluvioMsg);
+    public processProxyMessage(clientMessage: string) {
+        const message: Message = JSON.parse(clientMessage);
+        console.log(message);
         if (!isRequest(message.payload)) {
             const sid = message.sid;
             if (message.payload) {
-                await this.processClientMessage(
+                this.processNextState(
                     sid,
                     <ResponseMessage>message.payload.message
                 );
             } else {
-                await this.processNewConnection(sid);
+                this.processNewConnection(sid);
             }
         }
     }

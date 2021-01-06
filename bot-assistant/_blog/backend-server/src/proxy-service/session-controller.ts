@@ -1,41 +1,37 @@
 import WS from "ws";
 import { WsProxyOut } from "./proxy-out";
-import { TopicProducer, PartitionConsumer, Offset } from "@fluvio/client";
-import { Message, SID, buildInitMessage, buildResponse, isRequest } from "../messages";
+import {
+    SID,
+    Message,
+    buildInitMessage,
+    buildResponse,
+    isRequest
+} from "../messages";
+import { WorkflowController } from "../workflow-service/workflow-controller";
 
 type Messages = Array<Message>;
 
 export class SessionController {
     private sessionMessages: Map<SID, Messages>;
-    private fluvioProducer: TopicProducer;
-    private fluvioConsumer: PartitionConsumer;
     private proxyOut: WsProxyOut;
+    private workflowController: WorkflowController;
 
     constructor(
         proxyOut: WsProxyOut,
-        fluvioProducer: TopicProducer,
-        fluvioConsumer: PartitionConsumer
     ) {
         this.sessionMessages = new Map();
-
         this.proxyOut = proxyOut;
-        this.fluvioProducer = fluvioProducer;
-        this.fluvioConsumer = fluvioConsumer;
+
+        this.workflowController = Object();
     }
 
-    public async init() {
-        (await this.fluvioConsumer.fetch(Offset.FromBeginning())).toRecords().forEach(msg => {
-            this.addMessageToSession(JSON.parse(msg));
-        });
+    public init(workflowController: WorkflowController) {
+        this.workflowController = workflowController;
 
         this.show();
-
-        this.fluvioConsumer.stream(Offset.FromEnd(), (msg: string) => {
-            this.processFluvioMessage(msg);
-        });
     }
 
-    public async sessionOpened(sid: SID, ws: WS) {
+    public sessionOpened(sid: SID, ws: WS) {
         console.log(`start session - ${sid}`);
 
         this.proxyOut.addSession(sid, ws);
@@ -45,22 +41,22 @@ export class SessionController {
             this.sendMessagesToClient(messages);
         } else {
             const message = buildInitMessage(sid);
-            await this.fluvioProducer.sendRecord(JSON.stringify(message), 0);
+            this.workflowController.processProxyMessage(JSON.stringify(message));
         }
     }
 
-    public async sessionClosed(sid: SID) {
+    public sessionClosed(sid: SID) {
         console.log(`end session - ${sid}`);
 
         this.proxyOut.closeSession(sid);
     }
 
 
-    public async sessionMessage(sid: SID, clientMsg: string) {
+    public messageFromClient(sid: SID, clientMsg: string) {
         console.log(`${sid} <== ${clientMsg}`);
 
         const clientResponse = buildResponse(sid, JSON.parse(clientMsg));
-        await this.fluvioProducer.sendRecord(JSON.stringify(clientResponse), 0);
+        this.workflowController.processProxyMessage(JSON.stringify(clientResponse));
     }
 
     public sendMessagesToClient(messages: Messages) {
@@ -86,8 +82,8 @@ export class SessionController {
         this.sessionMessages.set(sid, messages);
     }
 
-    private processFluvioMessage(fluvioMsg: string) {
-        const message: Message = JSON.parse(fluvioMsg);
+    public processBotMessage(botMessage: string) {
+        const message: Message = JSON.parse(botMessage);
         this.addMessageToSession(message);
 
         if (isRequest(message.payload)) {

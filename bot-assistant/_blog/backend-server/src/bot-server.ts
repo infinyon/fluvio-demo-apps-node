@@ -4,32 +4,23 @@ import { WsProxyOut } from "./proxy-service/proxy-out";
 import { StateMachine, loadStateMachine } from "./workflow-service/state-machine";
 import { WorkflowController } from "./workflow-service/workflow-controller";
 import { SessionController } from "./proxy-service/session-controller";
-import Fluvio from '@fluvio/client';
-
-const BOT_ASSIST_MESSAGES = "bot-assist-messages";
 
 // Provision Bot Assistant server
-export const initBotAssistant = async (server: Server) => {
-
-    // Fluvio: connect, check topic, and create producer/consumer
-    const fluvio = await Fluvio.connect();
-    await checkTopic(fluvio);
-    const fluvioProducer = await fluvio.topicProducer(BOT_ASSIST_MESSAGES);
-    const fluvioConsumer = await fluvio.partitionConsumer(BOT_ASSIST_MESSAGES, 0);
+export const initBotAssistant = (server: Server) => {
 
     // Create proxy service
     const wsProxyOut = new WsProxyOut();
-    const sessionController = new SessionController(wsProxyOut, fluvioProducer, fluvioConsumer);
+    const sessionController = new SessionController(wsProxyOut);
     const wsProxyIn = new WsProxyIn(sessionController);
 
     // Create workflow service
     let filePath = getFileName();
     const stateMachine: StateMachine = loadStateMachine(filePath);
-    const workflowController = new WorkflowController(stateMachine, fluvioProducer, fluvioConsumer);
+    const workflowController = new WorkflowController(stateMachine);
 
     // Initialize service controllers
-    await sessionController.init();
-    await workflowController.init();
+    sessionController.init(workflowController);
+    workflowController.init(sessionController);
 
     // Create server
     wsProxyIn.init(server);
@@ -42,13 +33,4 @@ const getFileName = () => {
         process.exit(1);
     }
     return process.argv[2];
-}
-
-// Ensure topic exits
-const checkTopic = async (fluvio: Fluvio) => {
-    const admin = await fluvio.admin();
-    if (!await admin.findTopic(BOT_ASSIST_MESSAGES)) {
-        console.error("Error: Fluvio topic not found! Run `npm run setup`");
-        process.exit(1);
-    }
 }

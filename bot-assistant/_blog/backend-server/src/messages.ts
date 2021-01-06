@@ -1,7 +1,6 @@
 export type TimeStamp = string;
 export type SID = string;
 
-/* Message Header */
 export interface Message {
     sid: SID;
     payload?: Payload;
@@ -22,17 +21,16 @@ export interface Response {
     message: ResponseMessage,
 }
 
-/* Request Messages */
 export type RequestMessage =
     | BotText
     | ChoiceRequest
     | StartChatSession
     | EndChatSession;
 
-/* Response Messages */
 export type ResponseMessage =
     | ChoiceResponse
     | UserText
+
 
 export interface BotText {
     kind: "BotText",
@@ -76,7 +74,6 @@ export interface UserText {
     content?: string,
 }
 
-/* Build an initialization message */
 export function buildInitMessage(sid: SID) {
     return <Message>{
         sid: sid,
@@ -84,7 +81,6 @@ export function buildInitMessage(sid: SID) {
     };
 };
 
-/* Append header to a request message */
 export function buildRequest(sid: SID, message: RequestMessage) {
     return <Message>{
         sid: sid,
@@ -93,7 +89,6 @@ export function buildRequest(sid: SID, message: RequestMessage) {
     };
 };
 
-/* Append header to a response message */
 export function buildResponse(sid: SID, message: ResponseMessage) {
     return <Message>{
         sid: sid,
@@ -102,12 +97,10 @@ export function buildResponse(sid: SID, message: ResponseMessage) {
     };
 };
 
-/* Returns true if Request message, false otherwise */
 export function isRequest(payload?: Payload) {
     return (payload) ? (payload.kind == "Request") : false;
 }
 
-/* Generate timestamp */
 function getDateTime() {
     return new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
         .toISOString()
