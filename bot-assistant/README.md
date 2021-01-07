@@ -7,30 +7,22 @@ This project provides an example on how to write you own Robot Assistant. The pr
 **Note:**
 The server uses Fluvio data streaming for storage and message exchanges. If you don't have Fluvio installed, checkout [Getting Started](https://fluvio.io/docs/getting-started).
 
-## Building Bot Assistant
+Checkout [Build Your Own Custom Robot Assistant](blog/2020/12/bot-assistant/) for the step-by-step instructions,.
 
-From `bot-assistant` directory, setup environment (create fluvio topic):
+### Run Bot Assistant
+
+Open a new terminal window, navigate to `./bot-assistant` directory, and perform the following operations:
 
 ```bash
 npm run setup
 ```
 
-Then, build the project:
-
-```bash
-npm run build
-```
-
-This will run the `./build.sh` script, which will install the dependencies and build the robot client and server.
-
-### Run Bot Server
-
-Open a new terminal window, navigate to `./bot-assistant/bot-server` directory and start the server:
+Setup creates the fluvio topic. You only need to run this operation one time.
 
 ```bash
 PARAMS=state-machines/fluvio.json npm run start:server
 ```
-The server connects to Fluvio creates a topic and listens for client messages. If if the server successfully started, you should see the following message:
+The server connects to Fluvio and listens for client messages. If the server successfully started, you should see the following message:
 
 ```bash
 ...
@@ -41,19 +33,4 @@ The server connects to Fluvio creates a topic and listens for client messages. I
 started bot assistant server at http://localhost:9998...
 ```
 
-### Run Bot Client
-
-Open a new terminal window, navigate to `./bot-assistant/bot-client` directory and start the client:
-
-```bash
-npm run start:client
-```
-
-You should see the following message:
-
-```bash
-...
-listening http://localhost:9999
-```
-
-The client runs on port `9999`, start a web browser to view.
+Open the web browser at `http://localhost:9998` to interact with bot assistant.
