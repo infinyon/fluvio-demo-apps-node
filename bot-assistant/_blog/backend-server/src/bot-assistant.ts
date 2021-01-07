@@ -21,7 +21,7 @@ const startServer = async () => {
 
     Server.listen(PORT, () => {
         console.log(
-            `started bot assistant server at http://localhost:${PORT}...`
+            `started bot assistant server at ws://localhost:${PORT}...`
         );
     });
 };

@@ -12,8 +12,8 @@ import { SessionController } from "../proxy-service/session-controller";
 
 export class WorkflowController {
     private stateMachine: StateMachine;
-    private sessionController: SessionController;
     private initState: string;
+    private sessionController: SessionController;
 
     constructor(
         stateMachine: StateMachine,
@@ -106,7 +106,6 @@ export class WorkflowController {
 
     public processProxyMessage(clientMessage: string) {
         const message: Message = JSON.parse(clientMessage);
-        console.log(message);
         if (!isRequest(message.payload)) {
             const sid = message.sid;
             if (message.payload) {

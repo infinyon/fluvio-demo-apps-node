@@ -1,12 +1,6 @@
 import WS from "ws";
 import { WsProxyOut } from "./proxy-out";
-import {
-    SID,
-    Message,
-    buildInitMessage,
-    buildResponse,
-    isRequest
-} from "../messages";
+import { Message, SID, buildInitMessage, buildResponse, isRequest } from "../messages";
 import { WorkflowController } from "../workflow-service/workflow-controller";
 
 type Messages = Array<Message>;
@@ -20,8 +14,8 @@ export class SessionController {
         proxyOut: WsProxyOut,
     ) {
         this.sessionMessages = new Map();
-        this.proxyOut = proxyOut;
 
+        this.proxyOut = proxyOut;
         this.workflowController = Object();
     }
 

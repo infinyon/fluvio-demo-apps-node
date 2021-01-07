@@ -1,18 +1,18 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "lib": [
-            "dom",
-            "ES2017",
-            "ES2015"
-        ],
-        "outDir": "dist",
-        "strict": true,
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-    },
-    "include": [
-        "src/*",
-    ],
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"lib": [
+			"dom",
+			"ES2017",
+			"ES2015"
+		],
+		"outDir": "dist",
+		"strict": true,
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+	},
+	"include": [
+		"src/*",
+	],
 }
