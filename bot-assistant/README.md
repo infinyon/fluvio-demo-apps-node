@@ -2,7 +2,7 @@
 
 This project provides an example on how to write you own Robot Assistant. The product uses Fluvio data streaming for storage, Typescript for the server, and Javascript for the client.
 
-<p align="center"><img src="./bot-client/img/bot-assistant.png" alt="Bot Assistant" width="360"/></p>
+<p align="center"><img src="./public/img/bot-assistant.png" alt="Bot Assistant" width="360"/></p>
 
 **Note:**
 The server uses Fluvio data streaming for storage and message exchanges. If you don't have Fluvio installed, checkout [Getting Started](https://fluvio.io/docs/getting-started).

@@ -50,6 +50,7 @@ export class SessionController {
         console.log(`${sid} <== ${clientMsg}`);
 
         const clientResponse = buildResponse(sid, JSON.parse(clientMsg));
+        this.addMessageToSession(clientResponse);
         this.workflowController.processProxyMessage(JSON.stringify(clientResponse));
     }
 

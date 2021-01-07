@@ -31,7 +31,7 @@ export class SessionController {
         this.show();
 
         this.fluvioConsumer.stream(Offset.FromEnd(), (msg: string) => {
-            this.processFluvioMessage(msg);
+            this.processBotMessage(msg);
         });
     }
 
@@ -56,7 +56,7 @@ export class SessionController {
     }
 
 
-    public async sessionMessage(sid: SID, clientMsg: string) {
+    public async messageFromClient(sid: SID, clientMsg: string) {
         console.log(`${sid} <== ${clientMsg}`);
 
         const clientResponse = buildResponse(sid, JSON.parse(clientMsg));
@@ -86,7 +86,7 @@ export class SessionController {
         this.sessionMessages.set(sid, messages);
     }
 
-    private processFluvioMessage(fluvioMsg: string) {
+    private processBotMessage(fluvioMsg: string) {
         const message: Message = JSON.parse(fluvioMsg);
         this.addMessageToSession(message);
 

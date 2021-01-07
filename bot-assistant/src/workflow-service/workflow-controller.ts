@@ -19,7 +19,7 @@ export class WorkflowController {
     constructor(
         stateMachine: StateMachine,
         fluvioProducer: TopicProducer,
-        fluvioConsumer: PartitionConsumer
+        fluvioConsumer: PartitionConsumer,
     ) {
         this.stateMachine = stateMachine;
         this.initState = stateMachine.keys().next().value;
@@ -28,30 +28,21 @@ export class WorkflowController {
         this.fluvioConsumer = fluvioConsumer;
     }
 
-    public async init() {
+    public init() {
         this.fluvioConsumer.stream(Offset.FromEnd(), async (sessionMsg: string) => {
-            await this.processFluvioMessage(sessionMsg);
+            await this.processProxyMessage(sessionMsg);
         });
     }
 
     private async processNewConnection(sid: SID) {
-        const nextStates = this.getInit();
+        const nextStates = this.processNext(this.initState);
         await this.sendMessages(sid, nextStates);
     }
 
-    private async processClientMessage(sid: SID, response: ResponseMessage) {
-        const nextStates = this.getNext(response);
+    private async processNextState(sid: SID, response: ResponseMessage) {
+        const state: string = this.getState(response);
+        const nextStates = this.processNext(state);
         await this.sendMessages(sid, nextStates);
-    }
-
-    private getInit() {
-        return this.processNext(this.initState);
-    }
-
-    private getNext(response: ResponseMessage) {
-        var state: string = this.getState(response);
-
-        return this.processNext(state);
     }
 
     private getState(response: ResponseMessage) {
@@ -119,12 +110,12 @@ export class WorkflowController {
         }
     }
 
-    private async processFluvioMessage(fluvioMsg: string) {
-        const message: Message = JSON.parse(fluvioMsg);
+    public async processProxyMessage(clientMessage: string) {
+        const message: Message = JSON.parse(clientMessage);
         if (!isRequest(message.payload)) {
             const sid = message.sid;
             if (message.payload) {
-                await this.processClientMessage(
+                this.processNextState(
                     sid,
                     <ResponseMessage>message.payload.message
                 );

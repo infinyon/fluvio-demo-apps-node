@@ -29,7 +29,7 @@ export const initBotAssistant = async (server: Server) => {
 
     // Initialize service controllers
     await sessionController.init();
-    await workflowController.init();
+    workflowController.init();
 
     // Create server
     wsProxyIn.init(server);

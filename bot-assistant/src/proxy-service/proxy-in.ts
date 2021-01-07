@@ -53,7 +53,7 @@ export class WsProxyIn {
             });
 
             ws.on("message", async (clientMsg: string) => {
-                await WsProxyIn.sessionController.sessionMessage(sid, clientMsg);
+                await WsProxyIn.sessionController.messageFromClient(sid, clientMsg);
             });
 
         });
