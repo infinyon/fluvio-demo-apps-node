@@ -8,6 +8,13 @@ on:
     branches: [ master ]
 
 jobs:
+  cancel_previous_runs:
+    name: Cancel Previous Runs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
   test_chat_app:
     name: Test Chat App
     runs-on: ${{ matrix.os }}
@@ -17,10 +24,9 @@ jobs:
         node: [ '12', '14' ]
     steps:
       - name: Install Fluvio Local Cluster
-        uses: infinyon/fluvio@fix/action/fluvio/darwin
+        uses: infinyon/fluvio@master
         with:
           cluster-type: local
-          version: v0.6.0-alpha.3
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v1
@@ -30,6 +36,7 @@ jobs:
         run: |
           pushd ./chat-app/chat-server
           npm install
+          npm run setup
           npm run start &
           popd
       - name: Install Chat Client
@@ -37,11 +44,4 @@ jobs:
           pushd ./chat-app/chat-client
           npm install
           npm run start &
-          popd
-      - name: Install and Run Tests
-        run: |
-          pushd ./chat-app
-          npm install
-          npx cypress run -b chrome --headless
-          npm run test
           popd
