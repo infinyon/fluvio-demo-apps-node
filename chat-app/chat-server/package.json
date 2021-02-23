@@ -13,20 +13,20 @@
   "author": "fluvio <admin@fluvio.io> (fluvio.io)",
   "license": "Apache 2.0",
   "dependencies": {
-    "@fluvio/client": "^0.6.0-beta.5",
+    "@fluvio/client": "^0.6.0-beta.6",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "typescript": "^3.7.4",
-    "ws": "^7.2.3"
+    "typescript": "^3.9.9",
+    "ws": "^7.4.3"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
-    "@types/cors": "^2.8.9",
-    "@types/express": "^4.17.8",
-    "@types/node": "^13.11.1",
-    "@types/ws": "^7.2.4",
-    "ts-node": "^9.0.0",
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.11",
+    "@types/node": "^13.13.45",
+    "@types/ws": "^7.4.0",
+    "ts-node": "^9.1.1",
     "tsc-watch": "^4.2.9"
   }
 }
