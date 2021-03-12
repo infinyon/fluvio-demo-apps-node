@@ -19,6 +19,14 @@ npm run setup
 
 Setup creates the fluvio topic. You only need to run this operation one time.
 
+Next install Node.js packages:
+
+```bash
+npm install
+```
+
+Ready to start the server:
+
 ```bash
 PARAMS=state-machines/fluvio.json npm run start:server
 ```
