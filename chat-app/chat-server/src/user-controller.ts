@@ -1,4 +1,4 @@
-import { PartitionConsumer } from "@fluvio/client";
+import { PartitionConsumer, Record } from "@fluvio/client";
 import { ToRecords, FromStart, FromEnd } from "./fluvio-util";
 import { WsProxyOut } from "./proxy-out";
 import {
@@ -76,11 +76,11 @@ export class UserController {
         this.show();
         this.initColorIndex(this.users.size);
 
-        this.userConsumer.stream(FromEnd, (userMsg: string) => {
-            this.processUserMessage(userMsg);
+        this.userConsumer.stream(FromEnd, (userMsg: Record) => {
+            this.processUserMessage(userMsg.valueString());
         });
-        this.sessionConsumer.stream(FromEnd, (sessionMsg: string) => {
-            this.processSessionMessage(sessionMsg);
+        this.sessionConsumer.stream(FromEnd, (sessionMsg: Record) => {
+            this.processSessionMessage(sessionMsg.valueString());
         });
     }
 

@@ -1,6 +1,6 @@
 import WS from "ws";
 import { WsProxyOut } from "./proxy-out";
-import { TopicProducer, PartitionConsumer, Offset } from "@fluvio/client";
+import { TopicProducer, PartitionConsumer, Offset, Record } from "@fluvio/client";
 import { Message, SID, buildInitMessage, buildResponse, isRequest } from "../messages";
 
 type Messages = Array<Message>;
@@ -30,8 +30,8 @@ export class SessionController {
 
         this.show();
 
-        this.fluvioConsumer.stream(Offset.FromEnd(), (msg: string) => {
-            this.processBotMessage(msg);
+        this.fluvioConsumer.stream(Offset.FromEnd(), (msg: Record) => {
+            this.processBotMessage(msg.valueString());
         });
     }
 

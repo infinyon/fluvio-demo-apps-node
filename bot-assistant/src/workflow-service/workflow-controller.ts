@@ -8,7 +8,7 @@ import {
     isRequest
 } from "../messages";
 import { StateMachine, State } from "./state-machine";
-import { TopicProducer, PartitionConsumer, Offset } from "@fluvio/client";
+import { TopicProducer, PartitionConsumer, Offset, Record } from "@fluvio/client";
 
 export class WorkflowController {
     private stateMachine: StateMachine;
@@ -29,8 +29,8 @@ export class WorkflowController {
     }
 
     public init() {
-        this.fluvioConsumer.stream(Offset.FromEnd(), async (sessionMsg: string) => {
-            await this.processProxyMessage(sessionMsg);
+        this.fluvioConsumer.stream(Offset.FromEnd(), async (sessionMsg: Record) => {
+            await this.processProxyMessage(sessionMsg.valueString());
         });
     }
 

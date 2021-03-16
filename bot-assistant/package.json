@@ -5,13 +5,14 @@
   "main": "bot-assistant.js",
   "scripts": {
     "start:server": "tsc-watch --onSuccess \"node ./dist/bot-assistant.js $PARAMS\"",
+    "start:dist": "ts-node ./src/bot-assistant.ts $PARAMS",
     "setup": "sh ./tools/setup.sh",
     "cleanup": "sh ./tools/cleanup.sh"
   },
   "author": "fluvio <admin@fluvio.io> (fluvio.io)",
   "license": "Apache 2.0",
   "dependencies": {
-    "@fluvio/client": "^0.6.0-beta.6",
+    "@fluvio/client": "^0.7.1",
     "express": "^4.17.1",
     "typescript": "^4.1.3",
     "ws": "^7.4.2"

@@ -45,3 +45,11 @@ jobs:
           npm install
           npm run start &
           popd
+
+      - name: Test Chat Bot
+        run: |
+          pushd ./bot-assistant/
+          npm install
+          npm run setup
+          PARAMS=state-machines/fluvio.json npm run start:dist &
+          popd

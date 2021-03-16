@@ -1,5 +1,5 @@
 import WS from "ws";
-import { TopicProducer, PartitionConsumer } from "@fluvio/client";
+import { TopicProducer, PartitionConsumer, Record } from "@fluvio/client";
 import { FromEnd } from "./fluvio-util";
 import { WsProxyOut } from "./proxy-out";
 import {
@@ -91,8 +91,8 @@ export class SessionController {
     // Public APIs
 
     public async init() {
-        this.userConsumer.stream(FromEnd, (userMsg: string) => {
-            this.processUserMessage(userMsg);
+        this.userConsumer.stream(FromEnd, (userMsg: Record) => {
+            this.processUserMessage(userMsg.valueString());
         });
     }
 
