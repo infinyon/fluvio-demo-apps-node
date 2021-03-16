@@ -1,4 +1,4 @@
-import { PartitionConsumer } from "@fluvio/client";
+import { PartitionConsumer, Record } from "@fluvio/client";
 import { ToRecords, FromStart, FromEnd } from "./fluvio-util";
 import { WsProxyOut } from "./proxy-out";
 import {
@@ -46,11 +46,11 @@ export class ChatController {
         });
         this.show();
 
-        this.sessionConsumer.stream(FromEnd, (message: string) => {
-            this.processSessionMessage(message);
+        this.sessionConsumer.stream(FromEnd, (message: Record) => {
+            this.processSessionMessage(message.valueString());
         });
-        this.messageConsumer.stream(FromEnd, (message: string) => {
-            this.processChatMessage(message);
+        this.messageConsumer.stream(FromEnd, (message: Record) => {
+            this.processChatMessage(message.valueString());
         });
     }
 
