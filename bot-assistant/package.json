@@ -5,7 +5,7 @@
   "main": "bot-assistant.js",
   "scripts": {
     "start:server": "tsc-watch --onSuccess \"node ./dist/bot-assistant.js $PARAMS\"",
-    "start:dist": "node ./dist/bot-assistant.js $PARAMS",
+    "start:dist": "ts-node ./src/bot-assistant.ts $PARAMS",
     "setup": "sh ./tools/setup.sh",
     "cleanup": "sh ./tools/cleanup.sh"
   },
