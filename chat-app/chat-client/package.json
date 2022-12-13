@@ -20,7 +20,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/recompose": "^0.30.7",
     "@types/yup": "^0.26.27",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "html-webpack-plugin": "^4.5.1",
     "serve": "^11.3.2",
     "source-map-loader": "^0.2.4",
